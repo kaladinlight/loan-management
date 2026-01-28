@@ -1,6 +1,6 @@
 import { prisma } from '@/lib/db';
 import type { DashboardStats, LoanFilters, Loan } from '@/lib/types';
-import { LoanStatus, Prisma } from '@prisma/client';
+import { LoanStatus, Prisma } from '@/generated/prisma/client';
 
 export async function getDashboardStats(): Promise<DashboardStats> {
   const [loans, statusCounts] = await Promise.all([

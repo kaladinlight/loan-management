@@ -2,25 +2,46 @@
 
 ## Tech Stack
 
-- TypeScript (strict mode), Next.js (App Router), React, Tailwind CSS, shadcn/ui
-- PostgreSQL with Prisma ORM
-- Zod for validation
+- TypeScript (strict mode), Next.js 16 (App Router), React 19, Tailwind CSS 4, shadcn/ui
+- PostgreSQL 16 with Prisma 7 ORM (driver adapter: `@prisma/adapter-pg`)
+- Zod 4 for validation
 - ESLint + Prettier for linting/formatting
+- Yarn 4, Node 24
 
 ## Project Structure
 
 ```
 src/
-  app/          # Routing, pages, UI, components, hooks
-  lib/          # Server-side logic: actions/, data/, schemas/, types/, db.ts
-prisma/         # Prisma schema
+  app/              # Routing, pages, UI, components, hooks
+    components/     # App components
+    components/ui/  # shadcn/ui primitives
+    hooks/          # Custom React hooks
+  lib/              # Server-side logic
+    actions/        # Server actions (mutations, "use server")
+    data/           # Data access functions (queries)
+    schemas/        # Zod validation schemas
+    types/          # TypeScript type definitions
+    db.ts           # Prisma client singleton
+    utils.ts        # Shared utility functions
+generated/prisma/   # Auto-generated Prisma client (gitignored)
+prisma/
+  schema.prisma     # Database schema and generator config
+  seed.ts           # Database seed script
+prisma.config.ts    # Prisma configuration (project root)
 ```
 
-- `app/` — pages, layouts, components (`components/`, `components/ui/`), hooks (`hooks/`)
-- `lib/actions/` — server actions (mutations only, `"use server"` directive)
-- `lib/data/` — data access functions (queries, called from Server Components)
-- `lib/schemas/` — Zod validation schemas (shared between client and server)
-- `lib/types/` — TypeScript type definitions
+## Prisma 7 Notes
+
+- Generator: `prisma-client` with output to `generated/prisma` (project root, gitignored)
+- Import from `@/generated/prisma/client` (not `@prisma/client`); tsconfig alias maps `@/generated/*` to `./generated/*`
+- PrismaClient requires `PrismaPg` adapter — see `src/lib/db.ts`
+- Config file (`prisma.config.ts`) lives at project root, uses `env('DATABASE_URL')` + `import 'dotenv/config'`
+- Seed script uses relative import: `../generated/prisma/client`
+
+## Zod 4 Notes
+
+- Use `error` instead of `required_error` in schema params
+- e.g. `z.enum([...], { error: 'Field is required' })`
 
 ## Code Standards
 
@@ -39,6 +60,8 @@ prisma/         # Prisma schema
 - `yarn lint` — run ESLint
 - `yarn format` — format code with Prettier
 - `yarn format:check` — check formatting
-- `npx prisma migrate dev` — run database migrations
-- `npx prisma generate` — regenerate Prisma client
+- `yarn prisma:generate` — regenerate Prisma client
+- `yarn prisma:migrate` — run database migrations
+- `yarn prisma:studio` — open Prisma Studio GUI
+- `yarn prisma:seed` — seed the database
 - `docker compose up -d` — start PostgreSQL

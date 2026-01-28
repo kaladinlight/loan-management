@@ -22,11 +22,11 @@
 - [x] Create Zod validation schema (src/lib/schemas/loan.ts)
 - [x] Add utility functions (formatCurrency, formatDate, calculateMonthlyPayment, generateLoanNumber)
 
-## Phase 3: Data Layer (IN PROGRESS)
+## Phase 3: Data Layer ✅
 
 - [x] Create data access functions (src/lib/data/loans.ts) — getDashboardStats, getLoans, getLoan
-- [ ] Create server actions (src/lib/actions/loan.ts) — createLoan, updateLoan, deleteLoan
-- [ ] Create seed script (prisma/seed.ts) and seed database
+- [x] Create server actions (src/lib/actions/loan.ts) — createLoan, updateLoan, deleteLoan
+- [x] Create seed script (prisma/seed.ts) and seed database (12 loans)
 
 ## Phase 4: Layout, Dashboard, and Error Pages
 
@@ -64,7 +64,12 @@
 
 ## Notes
 
-- Using Prisma 7 (no `url` in schema.prisma; uses prisma/prisma.config.ts instead)
+- **Prisma 7 standard setup:**
+  - Generator: `prisma-client` with `output = "../generated/prisma"` (project root, not in `src/`)
+  - Config: `prisma.config.ts` at project root with `env('DATABASE_URL')` + `import 'dotenv/config'`
+  - Client: requires `@prisma/adapter-pg` + `pg` driver adapter (no `datasourceUrl` on constructor)
+  - Imports: `@/generated/prisma/client` (via tsconfig alias `@/generated/*` → `./generated/*`); seed uses relative `../generated/prisma/client`
+  - `generated/` is gitignored, prettierignored, and eslint-ignored; regenerated via `postinstall: prisma generate`
 - Using Zod 4 (use `error` instead of `required_error` in schema params)
 - Using Yarn 4.12.0 via corepack, Node 24 via nvm (.nvmrc)
 - `packageManager` field in package.json set to `yarn@4.12.0`
