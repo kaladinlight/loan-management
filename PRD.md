@@ -17,20 +17,20 @@ A full-stack Next.js application that enables lenders to create, view, and manag
 
 ### Loan
 
-| Field | Type | Description |
-|-------|------|-------------|
-| id | String (cuid) | Primary key |
-| loanNumber | String (auto) | Human-readable identifier (e.g., LN-00001), auto-generated |
-| purpose | Enum | PERSONAL, MORTGAGE, AUTO, BUSINESS, OTHER |
-| borrowerName | String | Full name of borrower |
-| borrowerEmail | String | Contact email |
-| amount | Decimal | Loan principal amount |
-| interestRate | Decimal | Annual interest rate (%) |
-| term | Int | Loan duration in months |
-| status | Enum | PENDING, ACTIVE, PAID, DEFAULTED |
-| startDate | DateTime | Loan start date |
-| createdAt | DateTime | Record creation timestamp |
-| updatedAt | DateTime | Record update timestamp |
+| Field         | Type          | Description                                                |
+| ------------- | ------------- | ---------------------------------------------------------- |
+| id            | String (cuid) | Primary key                                                |
+| loanNumber    | String (auto) | Human-readable identifier (e.g., LN-00001), auto-generated |
+| purpose       | Enum          | PERSONAL, MORTGAGE, AUTO, BUSINESS, OTHER                  |
+| borrowerName  | String        | Full name of borrower                                      |
+| borrowerEmail | String        | Contact email                                              |
+| amount        | Decimal       | Loan principal amount                                      |
+| interestRate  | Decimal       | Annual interest rate (%)                                   |
+| term          | Int           | Loan duration in months                                    |
+| status        | Enum          | PENDING, ACTIVE, PAID, DEFAULTED                           |
+| startDate     | DateTime      | Loan start date                                            |
+| createdAt     | DateTime      | Record creation timestamp                                  |
+| updatedAt     | DateTime      | Record update timestamp                                    |
 
 ## Pages & Routes
 
@@ -78,21 +78,21 @@ A full-stack Next.js application that enables lenders to create, view, and manag
 
 Server actions use the `"use server"` directive and handle data mutations. They are called from client components via form submissions or event handlers.
 
-| Action | Description |
-|--------|-------------|
-| `createLoan(data)` | Validates input with Zod, inserts a new loan, redirects to detail page |
+| Action                 | Description                                                                  |
+| ---------------------- | ---------------------------------------------------------------------------- |
+| `createLoan(data)`     | Validates input with Zod, inserts a new loan, redirects to detail page       |
 | `updateLoan(id, data)` | Validates input with Zod, updates an existing loan, redirects to detail page |
-| `deleteLoan(id)` | Deletes a loan by ID, redirects to list page |
+| `deleteLoan(id)`       | Deletes a loan by ID, redirects to list page                                 |
 
 ## Data Access Functions (Queries)
 
 Plain async functions in `lib/data/` — not server actions. Called directly from Server Components at render time. No `"use server"` directive needed since Server Components run on the server by default.
 
-| Function | Called From | Description |
-|----------|-------------|-------------|
-| `getDashboardStats()` | Dashboard (`page.tsx`) | Returns total count, portfolio value, counts by status, recent loans |
-| `getLoans(filters?)` | Loan List page (`page.tsx`) | Returns filtered/sorted loan list |
-| `getLoan(id)` | Loan Detail page (`page.tsx`) | Returns a single loan or null |
+| Function              | Called From                   | Description                                                          |
+| --------------------- | ----------------------------- | -------------------------------------------------------------------- |
+| `getDashboardStats()` | Dashboard (`page.tsx`)        | Returns total count, portfolio value, counts by status, recent loans |
+| `getLoans(filters?)`  | Loan List page (`page.tsx`)   | Returns filtered/sorted loan list                                    |
+| `getLoan(id)`         | Loan Detail page (`page.tsx`) | Returns a single loan or null                                        |
 
 ## Validation Rules
 

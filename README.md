@@ -42,17 +42,17 @@ Open [http://localhost:3000](http://localhost:3000) to view the app.
 
 ## Scripts
 
-| Command | Description |
-|---------|-------------|
-| `yarn dev` | Start dev server |
-| `yarn build` | Production build |
-| `yarn lint` | Run ESLint |
-| `yarn format` | Format code with Prettier |
-| `yarn format:check` | Check formatting |
-| `yarn prisma:generate` | Regenerate Prisma client |
-| `yarn prisma:migrate` | Run database migrations |
-| `yarn prisma:studio` | Open Prisma Studio GUI |
-| `docker compose up -d` | Start PostgreSQL |
+| Command                | Description               |
+| ---------------------- | ------------------------- |
+| `yarn dev`             | Start dev server          |
+| `yarn build`           | Production build          |
+| `yarn lint`            | Run ESLint                |
+| `yarn format`          | Format code with Prettier |
+| `yarn format:check`    | Check formatting          |
+| `yarn prisma:generate` | Regenerate Prisma client  |
+| `yarn prisma:migrate`  | Run database migrations   |
+| `yarn prisma:studio`   | Open Prisma Studio GUI    |
+| `docker compose up -d` | Start PostgreSQL          |
 
 ## Project Structure
 
