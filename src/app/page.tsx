@@ -12,14 +12,9 @@ export default async function DashboardPage(): Promise<React.ReactElement> {
 
   return (
     <div className="space-y-8">
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-        <div>
-          <h1 className="text-3xl font-bold tracking-tight">Dashboard</h1>
-          <p className="text-muted-foreground">Overview of your loan portfolio</p>
-        </div>
-        <Button asChild className="w-full sm:w-auto">
-          <Link href="/loans/new">Create Loan</Link>
-        </Button>
+      <div>
+        <h1 className="text-3xl font-bold tracking-tight">Dashboard</h1>
+        <p className="text-muted-foreground">Overview of your loan portfolio</p>
       </div>
 
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
@@ -70,7 +65,7 @@ export default async function DashboardPage(): Promise<React.ReactElement> {
                   {stats.recentLoans.map((loan) => (
                     <TableRow key={loan.id} className="hover:bg-muted/50 transition-colors">
                       <TableCell>
-                        <Link href={`/loans/${loan.id}`} className="font-medium text-primary hover:underline">
+                        <Link href={`/loans/${loan.loanNumber}`} className="font-medium text-primary hover:underline">
                           {loan.loanNumber}
                         </Link>
                       </TableCell>

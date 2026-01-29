@@ -18,9 +18,6 @@ export function Header(): React.ReactElement {
 
           {/* Desktop navigation */}
           <div className="hidden sm:flex items-center gap-6">
-            <Link href="/" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
-              Dashboard
-            </Link>
             <Link
               href="/loans"
               className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
@@ -57,13 +54,6 @@ export function Header(): React.ReactElement {
         {/* Mobile navigation */}
         {isMenuOpen && (
           <div className="sm:hidden pb-4 space-y-2">
-            <Link
-              href="/"
-              onClick={() => setIsMenuOpen(false)}
-              className="block px-3 py-2 text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-accent rounded-md transition-colors"
-            >
-              Dashboard
-            </Link>
             <Link
               href="/loans"
               onClick={() => setIsMenuOpen(false)}

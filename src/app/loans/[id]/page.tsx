@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { getLoan } from '@/lib/data/loans';
+import { getLoanByNumber } from '@/lib/data/loans';
 import { formatCurrency, formatDate, calculateMonthlyPayment, calculateTotalRepayment } from '@/lib/utils';
 import { LoanStatusBadge } from '@/app/components/LoanStatusBadge';
 import { DeleteLoanDialog } from '@/app/components/DeleteLoanDialog';
@@ -13,8 +13,8 @@ interface LoanDetailPageProps {
 }
 
 export default async function LoanDetailPage({ params }: LoanDetailPageProps): Promise<React.ReactElement> {
-  const { id } = await params;
-  const loan = await getLoan(id);
+  const { id: loanNumber } = await params;
+  const loan = await getLoanByNumber(loanNumber);
 
   if (!loan) {
     notFound();
@@ -41,9 +41,9 @@ export default async function LoanDetailPage({ params }: LoanDetailPageProps): P
         </div>
         <div className="flex gap-2">
           <Button asChild variant="outline">
-            <Link href={`/loans/${id}/edit`}>Edit</Link>
+            <Link href={`/loans/${loan.loanNumber}/edit`}>Edit</Link>
           </Button>
-          <DeleteLoanDialog loanId={id} loanNumber={loan.loanNumber} />
+          <DeleteLoanDialog loanId={loan.id} loanNumber={loan.loanNumber} />
         </div>
       </div>
 

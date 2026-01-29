@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { getLoan } from '@/lib/data/loans';
+import { getLoanByNumber } from '@/lib/data/loans';
 import { updateLoan } from '@/lib/actions/loan';
 import { LoanForm } from '@/app/components/LoanForm';
 import { Button } from '@/app/components/ui/button';
@@ -11,8 +11,8 @@ interface EditLoanPageProps {
 }
 
 export default async function EditLoanPage({ params }: EditLoanPageProps): Promise<React.ReactElement> {
-  const { id } = await params;
-  const loan = await getLoan(id);
+  const { id: loanNumber } = await params;
+  const loan = await getLoanByNumber(loanNumber);
 
   if (!loan) {
     notFound();
@@ -20,14 +20,14 @@ export default async function EditLoanPage({ params }: EditLoanPageProps): Promi
 
   const updateLoanWithId = async (prevState: ActionState, formData: FormData): Promise<ActionState> => {
     'use server';
-    return updateLoan(id, prevState, formData);
+    return updateLoan(loan.id, prevState, formData);
   };
 
   return (
     <div className="space-y-6">
       <div className="flex items-center gap-4">
         <Button asChild variant="ghost" size="sm">
-          <Link href={`/loans/${id}`}>← Back to Loan Details</Link>
+          <Link href={`/loans/${loan.loanNumber}`}>← Back to Loan Details</Link>
         </Button>
       </div>
 

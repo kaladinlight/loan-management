@@ -82,7 +82,7 @@ export function LoanDataTable({ loans }: LoanDataTableProps): React.ReactElement
         {loans.map((loan) => (
           <TableRow key={loan.id} className="hover:bg-muted/50 transition-colors">
             <TableCell>
-              <Link href={`/loans/${loan.id}`} className="font-medium text-primary hover:underline">
+              <Link href={`/loans/${loan.loanNumber}`} className="font-medium text-primary hover:underline">
                 {loan.loanNumber}
               </Link>
             </TableCell>

@@ -78,7 +78,12 @@ export async function getLoans(filters?: LoanFilters): Promise<Loan[]> {
   return loans.map(serializeLoan);
 }
 
-export async function getLoan(id: string): Promise<Loan | null> {
+export async function getLoanById(id: string): Promise<Loan | null> {
   const loan = await prisma.loan.findUnique({ where: { id } });
+  return loan ? serializeLoan(loan) : null;
+}
+
+export async function getLoanByNumber(loanNumber: string): Promise<Loan | null> {
+  const loan = await prisma.loan.findUnique({ where: { loanNumber } });
   return loan ? serializeLoan(loan) : null;
 }
