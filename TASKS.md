@@ -52,13 +52,16 @@
 - [x] Create loan creation page (src/app/loans/new/page.tsx)
 - [x] Create loan edit page (src/app/loans/[id]/edit/page.tsx)
 
-## Phase 7: Loan Detail, Polish, and Documentation
+## Phase 7: Loan Detail, Polish ✅
 
-- [ ] Create loan detail page (src/app/loans/[id]/page.tsx)
-- [ ] Create DeleteLoanDialog component (src/app/components/DeleteLoanDialog.tsx)
-- [ ] Create detail page loading/not-found/error files
-- [ ] Add hover transitions, focus-visible rings, aria-labels
-- [ ] Verify mobile responsiveness at 320px
+- [x] Create loan detail page (src/app/loans/[id]/page.tsx)
+- [x] Create DeleteLoanDialog component (src/app/components/DeleteLoanDialog.tsx)
+- [x] Create detail page loading/not-found/error files
+- [x] Add hover transitions, focus-visible rings, aria-labels
+- [x] Verify mobile responsiveness at 320px
+
+## Phase 8: Documentation
+
 - [ ] Create README.md with setup instructions
 - [ ] Final CLAUDE.md update
 

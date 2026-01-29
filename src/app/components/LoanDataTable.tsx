@@ -14,13 +14,15 @@ interface LoanDataTableProps {
 
 type SortableColumn = 'loanNumber' | 'borrowerName' | 'amount' | 'interestRate' | 'term' | 'startDate';
 
-const SORTABLE_COLUMNS: { key: SortableColumn; label: string; align?: 'right' }[] = [
-  { key: 'loanNumber', label: 'Loan Number' },
-  { key: 'borrowerName', label: 'Borrower Name' },
-  { key: 'amount', label: 'Amount', align: 'right' },
-  { key: 'interestRate', label: 'Interest Rate', align: 'right' },
-  { key: 'term', label: 'Term', align: 'right' },
-  { key: 'startDate', label: 'Start Date' },
+const COLUMNS: { key: SortableColumn | 'purpose' | 'status'; label: string; sortable: boolean; align?: 'right' }[] = [
+  { key: 'loanNumber', label: 'Loan Number', sortable: true },
+  { key: 'borrowerName', label: 'Borrower', sortable: true },
+  { key: 'purpose', label: 'Purpose', sortable: false },
+  { key: 'amount', label: 'Amount', sortable: true, align: 'right' },
+  { key: 'interestRate', label: 'Rate', sortable: true, align: 'right' },
+  { key: 'term', label: 'Term', sortable: true, align: 'right' },
+  { key: 'status', label: 'Status', sortable: false },
+  { key: 'startDate', label: 'Start Date', sortable: true },
 ];
 
 export function LoanDataTable({ loans }: LoanDataTableProps): React.ReactElement {
@@ -38,7 +40,7 @@ export function LoanDataTable({ loans }: LoanDataTableProps): React.ReactElement
     router.push(`/loans?${params.toString()}`);
   };
 
-  const getSortIndicator = (column: SortableColumn): string => {
+  const getSortIndicator = (column: string): string => {
     if (currentSortBy !== column) return '';
     return currentSortOrder === 'asc' ? ' ↑' : ' ↓';
   };
@@ -59,49 +61,28 @@ export function LoanDataTable({ loans }: LoanDataTableProps): React.ReactElement
     <Table>
       <TableHeader>
         <TableRow>
-          {SORTABLE_COLUMNS.slice(0, 2).map((col) => (
-            <TableHead key={col.key}>
-              <button
-                onClick={() => handleSort(col.key)}
-                className="font-medium hover:text-foreground transition-colors"
-                aria-label={`Sort by ${col.label}`}
-              >
-                {col.label}
-                {getSortIndicator(col.key)}
-              </button>
-            </TableHead>
-          ))}
-          <TableHead>Purpose</TableHead>
-          {SORTABLE_COLUMNS.slice(2, 5).map((col) => (
+          {COLUMNS.map((col) => (
             <TableHead key={col.key} className={col.align === 'right' ? 'text-right' : ''}>
-              <button
-                onClick={() => handleSort(col.key)}
-                className="font-medium hover:text-foreground transition-colors"
-                aria-label={`Sort by ${col.label}`}
-              >
-                {col.label}
-                {getSortIndicator(col.key)}
-              </button>
+              {col.sortable ? (
+                <button
+                  onClick={() => handleSort(col.key as SortableColumn)}
+                  className="font-medium hover:text-foreground transition-colors"
+                >
+                  {col.label}
+                  {getSortIndicator(col.key)}
+                </button>
+              ) : (
+                col.label
+              )}
             </TableHead>
           ))}
-          <TableHead>Status</TableHead>
-          <TableHead>
-            <button
-              onClick={() => handleSort('startDate')}
-              className="font-medium hover:text-foreground transition-colors"
-              aria-label="Sort by Start Date"
-            >
-              Start Date
-              {getSortIndicator('startDate')}
-            </button>
-          </TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
         {loans.map((loan) => (
-          <TableRow key={loan.id} className="cursor-pointer hover:bg-muted/50">
+          <TableRow key={loan.id} className="hover:bg-muted/50 transition-colors">
             <TableCell>
-              <Link href={`/loans/${loan.id}`} className="font-medium hover:underline">
+              <Link href={`/loans/${loan.id}`} className="font-medium text-primary hover:underline">
                 {loan.loanNumber}
               </Link>
             </TableCell>

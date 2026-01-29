@@ -12,12 +12,12 @@ export default async function DashboardPage(): Promise<React.ReactElement> {
 
   return (
     <div className="space-y-8">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
           <h1 className="text-3xl font-bold tracking-tight">Dashboard</h1>
           <p className="text-muted-foreground">Overview of your loan portfolio</p>
         </div>
-        <Button asChild>
+        <Button asChild className="w-full sm:w-auto">
           <Link href="/loans/new">Create Loan</Link>
         </Button>
       </div>
@@ -55,34 +55,36 @@ export default async function DashboardPage(): Promise<React.ReactElement> {
               </Button>
             </div>
           ) : (
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Loan Number</TableHead>
-                  <TableHead>Borrower</TableHead>
-                  <TableHead>Amount</TableHead>
-                  <TableHead>Status</TableHead>
-                  <TableHead>Start Date</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {stats.recentLoans.map((loan) => (
-                  <TableRow key={loan.id} className="cursor-pointer hover:bg-muted/50">
-                    <TableCell>
-                      <Link href={`/loans/${loan.id}`} className="font-medium hover:underline">
-                        {loan.loanNumber}
-                      </Link>
-                    </TableCell>
-                    <TableCell>{loan.borrowerName}</TableCell>
-                    <TableCell>{formatCurrency(loan.amount)}</TableCell>
-                    <TableCell>
-                      <LoanStatusBadge status={loan.status} />
-                    </TableCell>
-                    <TableCell>{formatDate(loan.startDate)}</TableCell>
+            <div className="overflow-x-auto">
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Loan Number</TableHead>
+                    <TableHead>Borrower</TableHead>
+                    <TableHead>Amount</TableHead>
+                    <TableHead>Status</TableHead>
+                    <TableHead>Start Date</TableHead>
                   </TableRow>
-                ))}
-              </TableBody>
-            </Table>
+                </TableHeader>
+                <TableBody>
+                  {stats.recentLoans.map((loan) => (
+                    <TableRow key={loan.id} className="hover:bg-muted/50 transition-colors">
+                      <TableCell>
+                        <Link href={`/loans/${loan.id}`} className="font-medium text-primary hover:underline">
+                          {loan.loanNumber}
+                        </Link>
+                      </TableCell>
+                      <TableCell>{loan.borrowerName}</TableCell>
+                      <TableCell>{formatCurrency(loan.amount)}</TableCell>
+                      <TableCell>
+                        <LoanStatusBadge status={loan.status} />
+                      </TableCell>
+                      <TableCell>{formatDate(loan.startDate)}</TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </div>
           )}
         </CardContent>
       </Card>

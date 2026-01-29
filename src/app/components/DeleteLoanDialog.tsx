@@ -1,0 +1,61 @@
+'use client';
+
+import { useState, useTransition } from 'react';
+import { deleteLoan } from '@/lib/actions/loan';
+import { Button } from '@/app/components/ui/button';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@/app/components/ui/dialog';
+import { toast } from 'sonner';
+
+interface DeleteLoanDialogProps {
+  loanId: string;
+  loanNumber: string;
+}
+
+export function DeleteLoanDialog({ loanId, loanNumber }: DeleteLoanDialogProps): React.ReactElement {
+  const [open, setOpen] = useState(false);
+  const [isPending, startTransition] = useTransition();
+
+  const handleDelete = (): void => {
+    startTransition(async () => {
+      try {
+        await deleteLoan(loanId);
+        toast.success(`Loan ${loanNumber} deleted successfully`);
+      } catch {
+        toast.error('Failed to delete loan');
+        setOpen(false);
+      }
+    });
+  };
+
+  return (
+    <Dialog open={open} onOpenChange={setOpen}>
+      <DialogTrigger asChild>
+        <Button variant="destructive">Delete</Button>
+      </DialogTrigger>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>Delete Loan</DialogTitle>
+          <DialogDescription>
+            Are you sure you want to delete loan <strong>{loanNumber}</strong>? This action cannot be undone.
+          </DialogDescription>
+        </DialogHeader>
+        <DialogFooter>
+          <Button variant="outline" onClick={() => setOpen(false)} disabled={isPending}>
+            Cancel
+          </Button>
+          <Button variant="destructive" onClick={handleDelete} disabled={isPending}>
+            {isPending ? 'Deleting...' : 'Delete'}
+          </Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
+  );
+}
