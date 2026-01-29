@@ -39,12 +39,12 @@
 - [x] Create global 404 page (src/app/not-found.tsx)
 - [x] Create global error boundary (src/app/global-error.tsx)
 
-## Phase 5: Loan List Page
+## Phase 5: Loan List Page ✅
 
-- [ ] Create loan list page (src/app/loans/page.tsx)
-- [ ] Create LoanDataTable component (src/app/components/LoanDataTable.tsx)
-- [ ] Create LoanFilters component (src/app/components/LoanFilters.tsx)
-- [ ] Create useDebounce hook (src/app/hooks/useDebounce.ts)
+- [x] Create loan list page (src/app/loans/page.tsx)
+- [x] Create LoanDataTable component (src/app/components/LoanDataTable.tsx)
+- [x] Create LoanFilters component (src/app/components/LoanFilters.tsx)
+- [x] Create useDebounce hook (src/app/hooks/useDebounce.ts)
 
 ## Phase 6: Loan Form (Create and Edit)
 

@@ -1,6 +1,29 @@
 import { Prisma } from '@/generated/prisma/client';
 
-export type Loan = Prisma.LoanGetPayload<object>;
+export type PrismaLoan = Prisma.LoanGetPayload<object>;
+
+export interface Loan {
+  id: string;
+  loanNumber: string;
+  purpose: 'PERSONAL' | 'MORTGAGE' | 'AUTO' | 'BUSINESS' | 'OTHER';
+  borrowerName: string;
+  borrowerEmail: string;
+  amount: number;
+  interestRate: number;
+  term: number;
+  status: 'PENDING' | 'ACTIVE' | 'PAID' | 'DEFAULTED';
+  startDate: Date;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export function serializeLoan(loan: PrismaLoan): Loan {
+  return {
+    ...loan,
+    amount: Number(loan.amount),
+    interestRate: Number(loan.interestRate),
+  };
+}
 
 export interface DashboardStats {
   totalLoans: number;

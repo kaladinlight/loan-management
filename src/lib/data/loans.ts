@@ -1,5 +1,6 @@
 import { prisma } from '@/lib/db';
 import type { DashboardStats, LoanFilters, Loan } from '@/lib/types';
+import { serializeLoan } from '@/lib/types';
 import { LoanStatus, Prisma } from '@/generated/prisma/client';
 
 export async function getDashboardStats(): Promise<DashboardStats> {
@@ -50,7 +51,7 @@ export async function getDashboardStats(): Promise<DashboardStats> {
     activeCount,
     paidCount,
     defaultedCount,
-    recentLoans: loans,
+    recentLoans: loans.map(serializeLoan),
   };
 }
 
@@ -73,9 +74,11 @@ export async function getLoans(filters?: LoanFilters): Promise<Loan[]> {
   const sortOrder = filters?.sortOrder ?? 'desc';
   (orderBy as Record<string, string>)[sortBy] = sortOrder;
 
-  return prisma.loan.findMany({ where, orderBy });
+  const loans = await prisma.loan.findMany({ where, orderBy });
+  return loans.map(serializeLoan);
 }
 
 export async function getLoan(id: string): Promise<Loan | null> {
-  return prisma.loan.findUnique({ where: { id } });
+  const loan = await prisma.loan.findUnique({ where: { id } });
+  return loan ? serializeLoan(loan) : null;
 }

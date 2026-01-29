@@ -74,7 +74,7 @@ export default async function DashboardPage(): Promise<React.ReactElement> {
                       </Link>
                     </TableCell>
                     <TableCell>{loan.borrowerName}</TableCell>
-                    <TableCell>{formatCurrency(Number(loan.amount))}</TableCell>
+                    <TableCell>{formatCurrency(loan.amount)}</TableCell>
                     <TableCell>
                       <LoanStatusBadge status={loan.status} />
                     </TableCell>
