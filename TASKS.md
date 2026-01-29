@@ -28,16 +28,16 @@
 - [x] Create server actions (src/lib/actions/loan.ts) — createLoan, updateLoan, deleteLoan
 - [x] Create seed script (prisma/seed.ts) and seed database (12 loans)
 
-## Phase 4: Layout, Dashboard, and Error Pages
+## Phase 4: Layout, Dashboard, and Error Pages ✅
 
-- [ ] Create root layout with font, Toaster, nav (src/app/layout.tsx)
-- [ ] Create Header component (src/app/components/Header.tsx)
-- [ ] Create StatCard component (src/app/components/StatCard.tsx)
-- [ ] Create LoanStatusBadge component (src/app/components/LoanStatusBadge.tsx)
-- [ ] Create dashboard page (src/app/page.tsx)
-- [ ] Create dashboard loading skeleton (src/app/loading.tsx)
-- [ ] Create global 404 page (src/app/not-found.tsx)
-- [ ] Create global error boundary (src/app/global-error.tsx)
+- [x] Create root layout with font, Toaster, nav (src/app/layout.tsx)
+- [x] Create Header component (src/app/components/Header.tsx)
+- [x] Create StatCard component (src/app/components/StatCard.tsx)
+- [x] Create LoanStatusBadge component (src/app/components/LoanStatusBadge.tsx)
+- [x] Create dashboard page (src/app/page.tsx)
+- [x] Create dashboard loading skeleton (src/app/loading.tsx)
+- [x] Create global 404 page (src/app/not-found.tsx)
+- [x] Create global error boundary (src/app/global-error.tsx)
 
 ## Phase 5: Loan List Page
 
