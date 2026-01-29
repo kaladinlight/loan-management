@@ -1,18 +1,12 @@
 'use client';
 
 import { useTheme } from 'next-themes';
-import { useEffect, useState } from 'react';
 import { Button } from '@/app/components/ui/button';
 
 export function ThemeToggle(): React.ReactElement {
-  const { theme, setTheme } = useTheme();
-  const [mounted, setMounted] = useState(false);
+  const { theme, setTheme, resolvedTheme } = useTheme();
 
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
-  if (!mounted) {
+  if (!resolvedTheme) {
     return (
       <Button variant="ghost" size="icon-sm" aria-label="Toggle theme">
         <span className="h-4 w-4" />

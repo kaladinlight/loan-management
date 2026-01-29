@@ -1,7 +1,7 @@
 'use client';
 
 import { useActionState } from 'react';
-import { useForm } from 'react-hook-form';
+import { Resolver, useForm, useWatch } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { loanSchema, type LoanFormData } from '@/lib/schemas/loan';
 import type { ActionState, Loan } from '@/lib/types';
@@ -36,30 +36,17 @@ export function LoanForm({ loan, action, submitLabel }: LoanFormProps): React.Re
   const [state, formAction, isPending] = useActionState(action, { success: true });
 
   const {
+    control,
     register,
     formState: { errors },
     setValue,
-    watch,
   } = useForm<LoanFormData>({
-    resolver: zodResolver(loanSchema),
-    defaultValues: loan
-      ? {
-          purpose: loan.purpose,
-          borrowerName: loan.borrowerName,
-          borrowerEmail: loan.borrowerEmail,
-          amount: loan.amount,
-          interestRate: loan.interestRate,
-          term: loan.term,
-          status: loan.status,
-          startDate: new Date(loan.startDate),
-        }
-      : {
-          status: 'PENDING',
-        },
+    resolver: zodResolver(loanSchema) as Resolver<LoanFormData>,
+    defaultValues: loan ? loanSchema.parse(loan) : undefined,
   });
 
-  const purposeValue = watch('purpose');
-  const statusValue = watch('status');
+  const purposeValue = useWatch({ control, name: 'purpose' });
+  const statusValue = useWatch({ control, name: 'status' });
 
   const getFieldError = (field: string): string | undefined => {
     const clientError = errors[field as keyof LoanFormData]?.message;
@@ -140,7 +127,10 @@ export function LoanForm({ loan, action, submitLabel }: LoanFormProps): React.Re
             <div className="space-y-2">
               <Label htmlFor="status">Status</Label>
               <input type="hidden" {...register('status')} />
-              <Select value={statusValue} onValueChange={(value) => setValue('status', value as LoanFormData['status'])}>
+              <Select
+                value={statusValue}
+                onValueChange={(value) => setValue('status', value as LoanFormData['status'])}
+              >
                 <SelectTrigger id="status" aria-describedby={getFieldError('status') ? 'status-error' : undefined}>
                   <SelectValue placeholder="Select status" />
                 </SelectTrigger>

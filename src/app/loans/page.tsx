@@ -1,9 +1,7 @@
-import Link from 'next/link';
 import { Suspense } from 'react';
 import { getLoans } from '@/lib/data/loans';
 import { LoanDataTable } from '@/app/components/LoanDataTable';
 import { LoanFilters } from '@/app/components/LoanFilters';
-import { Button } from '@/app/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/app/components/ui/card';
 import { Skeleton } from '@/app/components/ui/skeleton';
 

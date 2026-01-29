@@ -124,9 +124,7 @@ export default async function LoanDetailPage({ params }: LoanDetailPageProps): P
             <div className="grid gap-4 sm:grid-cols-2 text-sm text-muted-foreground">
               <div>
                 <span>Total Interest: </span>
-                <span className="font-medium text-foreground">
-                  {formatCurrency(totalRepayment - loan.amount)}
-                </span>
+                <span className="font-medium text-foreground">{formatCurrency(totalRepayment - loan.amount)}</span>
               </div>
               <div>
                 <span>Created: </span>
