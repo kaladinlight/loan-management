@@ -46,11 +46,11 @@
 - [x] Create LoanFilters component (src/app/components/LoanFilters.tsx)
 - [x] Create useDebounce hook (src/app/hooks/useDebounce.ts)
 
-## Phase 6: Loan Form (Create and Edit)
+## Phase 6: Loan Form (Create and Edit) ✅
 
-- [ ] Create LoanForm component (src/app/components/LoanForm.tsx)
-- [ ] Create loan creation page (src/app/loans/new/page.tsx)
-- [ ] Create loan edit page (src/app/loans/[id]/edit/page.tsx)
+- [x] Create LoanForm component (src/app/components/LoanForm.tsx)
+- [x] Create loan creation page (src/app/loans/new/page.tsx)
+- [x] Create loan edit page (src/app/loans/[id]/edit/page.tsx)
 
 ## Phase 7: Loan Detail, Polish, and Documentation
 
