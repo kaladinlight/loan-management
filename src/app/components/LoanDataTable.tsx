@@ -121,7 +121,11 @@ export function LoanDataTable({
     setIsLoading(true);
     try {
       const result = await fetchMoreLoans(allLoans.length, PAGE_SIZE, currentFilters);
-      setAllLoans((prev) => [...prev, ...result.loans]);
+      setAllLoans((prev) => {
+        const existingIds = new Set(prev.map((l) => l.id));
+        const newLoans = result.loans.filter((l) => !existingIds.has(l.id));
+        return [...prev, ...newLoans];
+      });
       setHasMore(result.hasMore);
       setTotal(result.total);
     } finally {

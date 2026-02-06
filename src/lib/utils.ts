@@ -31,7 +31,3 @@ export function calculateMonthlyPayment(principal: number, annualRate: number, t
 export function calculateTotalRepayment(principal: number, annualRate: number, termMonths: number): number {
   return calculateMonthlyPayment(principal, annualRate, termMonths) * termMonths;
 }
-
-export function generateLoanNumber(currentCount: number): string {
-  return `LN-${String(currentCount + 1).padStart(5, '0')}`;
-}

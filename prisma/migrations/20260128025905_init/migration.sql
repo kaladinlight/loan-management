@@ -24,3 +24,6 @@ CREATE TABLE "Loan" (
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Loan_loanNumber_key" ON "Loan"("loanNumber");
+
+-- CreateSequence for loan numbers
+CREATE SEQUENCE loan_number_seq START WITH 1;

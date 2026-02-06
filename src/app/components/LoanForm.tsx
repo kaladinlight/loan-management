@@ -10,23 +10,9 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/app/components/ui/ca
 import { Input } from '@/app/components/ui/input';
 import { Label } from '@/app/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/app/components/ui/select';
+import { LOAN_PURPOSE_OPTIONS, LOAN_STATUS_OPTIONS } from '@/lib/constants';
 import { type LoanFormData, loanSchema } from '@/lib/schemas/loan';
 import type { ActionState, Loan } from '@/lib/types';
-
-const PURPOSE_OPTIONS = [
-  { value: 'PERSONAL', label: 'Personal' },
-  { value: 'MORTGAGE', label: 'Mortgage' },
-  { value: 'AUTO', label: 'Auto' },
-  { value: 'BUSINESS', label: 'Business' },
-  { value: 'OTHER', label: 'Other' },
-];
-
-const STATUS_OPTIONS = [
-  { value: 'PENDING', label: 'Pending' },
-  { value: 'ACTIVE', label: 'Active' },
-  { value: 'PAID', label: 'Paid' },
-  { value: 'DEFAULTED', label: 'Defaulted' },
-];
 
 interface LoanFormProps {
   loan?: Loan;
@@ -132,7 +118,7 @@ export function LoanForm({ loan, action, submitLabel }: LoanFormProps): React.Re
                   <SelectValue placeholder="Select purpose" />
                 </SelectTrigger>
                 <SelectContent>
-                  {PURPOSE_OPTIONS.map((option) => (
+                  {LOAN_PURPOSE_OPTIONS.map((option) => (
                     <SelectItem key={option.value} value={option.value}>
                       {option.label}
                     </SelectItem>
@@ -157,7 +143,7 @@ export function LoanForm({ loan, action, submitLabel }: LoanFormProps): React.Re
                   <SelectValue placeholder="Select status" />
                 </SelectTrigger>
                 <SelectContent>
-                  {STATUS_OPTIONS.map((option) => (
+                  {LOAN_STATUS_OPTIONS.map((option) => (
                     <SelectItem key={option.value} value={option.value}>
                       {option.label}
                     </SelectItem>

@@ -16,21 +16,7 @@ import {
 } from '@/app/components/ui/dropdown-menu';
 import { Input } from '@/app/components/ui/input';
 import { useDebounce } from '@/app/hooks/useDebounce';
-
-const STATUS_OPTIONS = [
-  { value: 'PENDING', label: 'Pending' },
-  { value: 'ACTIVE', label: 'Active' },
-  { value: 'PAID', label: 'Paid' },
-  { value: 'DEFAULTED', label: 'Defaulted' },
-];
-
-const PURPOSE_OPTIONS = [
-  { value: 'PERSONAL', label: 'Personal' },
-  { value: 'MORTGAGE', label: 'Mortgage' },
-  { value: 'AUTO', label: 'Auto' },
-  { value: 'BUSINESS', label: 'Business' },
-  { value: 'OTHER', label: 'Other' },
-];
+import { LOAN_PURPOSE_OPTIONS, LOAN_STATUS_OPTIONS } from '@/lib/constants';
 
 export function LoanFilters(): React.ReactElement {
   const router = useRouter();
@@ -48,14 +34,14 @@ export function LoanFilters(): React.ReactElement {
   const activeFilters: { type: 'status' | 'purpose'; value: string; label: string }[] = [];
 
   if (currentStatus) {
-    const statusOption = STATUS_OPTIONS.find((o) => o.value === currentStatus);
+    const statusOption = LOAN_STATUS_OPTIONS.find((o) => o.value === currentStatus);
     if (statusOption) {
       activeFilters.push({ type: 'status', value: currentStatus, label: statusOption.label });
     }
   }
 
   if (currentPurpose) {
-    const purposeOption = PURPOSE_OPTIONS.find((o) => o.value === currentPurpose);
+    const purposeOption = LOAN_PURPOSE_OPTIONS.find((o) => o.value === currentPurpose);
     if (purposeOption) {
       activeFilters.push({ type: 'purpose', value: currentPurpose, label: purposeOption.label });
     }
@@ -152,7 +138,7 @@ export function LoanFilters(): React.ReactElement {
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="w-56">
             <DropdownMenuLabel>Status</DropdownMenuLabel>
-            {STATUS_OPTIONS.map((option) => (
+            {LOAN_STATUS_OPTIONS.map((option) => (
               <DropdownMenuCheckboxItem
                 key={option.value}
                 checked={currentStatus === option.value}
@@ -165,7 +151,7 @@ export function LoanFilters(): React.ReactElement {
             <DropdownMenuSeparator />
 
             <DropdownMenuLabel>Purpose</DropdownMenuLabel>
-            {PURPOSE_OPTIONS.map((option) => (
+            {LOAN_PURPOSE_OPTIONS.map((option) => (
               <DropdownMenuCheckboxItem
                 key={option.value}
                 checked={currentPurpose === option.value}

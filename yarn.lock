@@ -547,6 +547,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@faker-js/faker@npm:^10.2.0":
+  version: 10.2.0
+  resolution: "@faker-js/faker@npm:10.2.0"
+  checksum: 10c0/72b5048ff32e90b2876560015e177f91b0625dafaaa43631302e413329105be331a1c126c8f7b0f95817cacd51c9222b58e62b6f09f5485522302e6103f19f09
+  languageName: node
+  linkType: hard
+
 "@floating-ui/core@npm:^1.7.4":
   version: 1.7.4
   resolution: "@floating-ui/core@npm:1.7.4"
@@ -4872,6 +4879,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "loan-management@workspace:."
   dependencies:
+    "@faker-js/faker": "npm:^10.2.0"
     "@hookform/resolvers": "npm:^5.2.2"
     "@prisma/adapter-pg": "npm:^7.3.0"
     "@prisma/client": "npm:7"

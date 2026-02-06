@@ -43,6 +43,10 @@ prisma.config.ts    # Prisma configuration (project root)
 - Use `error` instead of `required_error` in schema params
 - e.g. `z.enum([...], { error: 'Field is required' })`
 
+## Workflow
+
+- Do not run `yarn lint` or `yarn build` after making changes — the dev server handles this automatically
+
 ## Code Standards
 
 - No `any` types — use proper typing or `unknown` with narrowing

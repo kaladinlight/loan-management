@@ -7,7 +7,12 @@ import { getLoans } from '@/lib/data/loans';
 import { prisma } from '@/lib/db';
 import { loanSchema } from '@/lib/schemas/loan';
 import type { ActionState, PaginatedLoansResult, PaginationFilters } from '@/lib/types';
-import { generateLoanNumber } from '@/lib/utils';
+
+async function getNextLoanNumber(): Promise<string> {
+  const result = await prisma.$queryRaw<[{ nextval: bigint }]>`SELECT nextval('loan_number_seq')`;
+  const nextVal = Number(result[0].nextval);
+  return `LN-${nextVal}`;
+}
 
 export async function createLoan(_prevState: ActionState, formData: FormData): Promise<ActionState> {
   const raw = Object.fromEntries(formData.entries());
@@ -23,8 +28,7 @@ export async function createLoan(_prevState: ActionState, formData: FormData): P
     return { success: false, fieldErrors };
   }
 
-  const count = await prisma.loan.count();
-  const loanNumber = generateLoanNumber(count);
+  const loanNumber = await getNextLoanNumber();
 
   await prisma.loan.create({
     data: {
