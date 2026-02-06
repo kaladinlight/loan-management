@@ -9,19 +9,16 @@ import { Button } from '@/app/components/ui/button'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/app/components/ui/table'
 import { useInfiniteScroll } from '@/app/hooks/useInfiniteScroll'
 import { usePaginatedLoanData } from '@/app/hooks/usePaginatedLoanData'
-import type { Loan, PaginationFilters } from '@/lib/types'
+import type { Loan, PaginationFilters, SortableColumn, SortOrder } from '@/lib/types/loans'
 import { formatCurrency, formatDate } from '@/lib/utils'
 
-const PAGE_SIZE = 20
-
 interface LoanDataTableProps {
-  initialLoans: Loan[]
-  initialTotal: number
-  initialHasMore: boolean
-  initialFilters: PaginationFilters
+  initial: {
+    loans: Loan[]
+    total: number
+    hasMore: boolean
+  }
 }
-
-type SortableColumn = 'loanNumber' | 'borrowerName' | 'amount' | 'interestRate' | 'term' | 'startDate'
 
 const COLUMNS: { key: SortableColumn | 'purpose' | 'status'; label: string; sortable: boolean; align?: 'right' }[] = [
   { key: 'loanNumber', label: 'Loan Number', sortable: true },
@@ -34,28 +31,19 @@ const COLUMNS: { key: SortableColumn | 'purpose' | 'status'; label: string; sort
   { key: 'startDate', label: 'Start Date', sortable: true },
 ]
 
-export function LoanDataTable({
-  initialLoans,
-  initialTotal,
-  initialHasMore,
-  initialFilters,
-}: LoanDataTableProps): React.ReactElement {
+export function LoanDataTable({ initial }: LoanDataTableProps): React.ReactElement {
   const searchParams = useSearchParams()
   const scrollContainerRef = useRef<HTMLDivElement>(null)
 
-  const currentSortBy = searchParams.get('sortBy')
-  const currentSortOrder = searchParams.get('sortOrder') as 'asc' | 'desc' | null
-  const searchTerm = searchParams.get('search') ?? ''
-  const statusFilter = searchParams.get('status') ?? ''
-  const purposeFilter = searchParams.get('purpose') ?? ''
-
-  const currentFilters: PaginationFilters = useMemo(
+  const filters: PaginationFilters = useMemo(
     () => ({
-      search: searchTerm || undefined,
-      status: statusFilter || undefined,
-      purpose: purposeFilter || undefined,
+      search: searchParams.get('search') ?? undefined,
+      status: searchParams.get('status') ?? undefined,
+      purpose: searchParams.get('purpose') ?? undefined,
+      sortBy: (searchParams.get('sortBy') as SortableColumn) ?? undefined,
+      sortOrder: (searchParams.get('sortOrder') as SortOrder) ?? undefined,
     }),
-    [searchTerm, statusFilter, purposeFilter],
+    [searchParams],
   )
 
   const handleReset = useMemo(
@@ -66,12 +54,8 @@ export function LoanDataTable({
   )
 
   const { loans, total, hasMore, isLoading, loadMore } = usePaginatedLoanData({
-    initialLoans,
-    initialTotal,
-    initialHasMore,
-    initialFilters,
-    currentFilters,
-    pageSize: PAGE_SIZE,
+    initial,
+    filters,
     onReset: handleReset,
   })
 
@@ -82,40 +66,13 @@ export function LoanDataTable({
     scrollContainerRef,
   })
 
-  // Client-side sorting only (no filtering - server handles that)
-  const sortedLoans = useMemo(() => {
-    const result = [...loans]
-
-    const sortBy = currentSortBy ?? 'createdAt'
-    const sortOrder = currentSortOrder ?? 'desc'
-
-    result.sort((a, b) => {
-      let aVal: string | number | Date = a[sortBy as keyof Loan] as string | number | Date
-      let bVal: string | number | Date = b[sortBy as keyof Loan] as string | number | Date
-
-      if (aVal instanceof Date) aVal = aVal.getTime()
-      if (bVal instanceof Date) bVal = bVal.getTime()
-
-      if (typeof aVal === 'string') {
-        aVal = aVal.toLowerCase()
-        bVal = (bVal as string).toLowerCase()
-      }
-
-      if (aVal < bVal) return sortOrder === 'asc' ? -1 : 1
-      if (aVal > bVal) return sortOrder === 'asc' ? 1 : -1
-      return 0
-    })
-
-    return result
-  }, [loans, currentSortBy, currentSortOrder])
-
   const handleSort = (column: SortableColumn): void => {
     const params = new URLSearchParams(searchParams.toString())
 
-    if (currentSortBy !== column) {
+    if (filters.sortBy !== column) {
       params.set('sortBy', column)
       params.set('sortOrder', 'asc')
-    } else if (currentSortOrder === 'asc') {
+    } else if (filters.sortOrder === 'asc') {
       params.set('sortBy', column)
       params.set('sortOrder', 'desc')
     } else {
@@ -128,25 +85,25 @@ export function LoanDataTable({
   }
 
   const getSortIndicator = (column: string): React.ReactNode => {
-    const isActive = currentSortBy === column
+    const isActive = filters.sortBy === column
     return (
       <span className="ml-1 inline-flex flex-col leading-[0.5] text-[0.6em] align-middle">
-        <span className={isActive && currentSortOrder === 'asc' ? '' : 'text-muted-foreground/40'}>↑</span>
-        <span className={isActive && currentSortOrder === 'desc' ? '' : 'text-muted-foreground/40'}>↓</span>
+        <span className={isActive && filters.sortOrder === 'asc' ? '' : 'text-muted-foreground/40'}>↑</span>
+        <span className={isActive && filters.sortOrder === 'desc' ? '' : 'text-muted-foreground/40'}>↓</span>
       </span>
     )
   }
+
+  const hasActiveFilters = filters.search || filters.status || filters.purpose
 
   if (loans.length === 0 && !isLoading) {
     return (
       <div className="text-center py-12 text-muted-foreground">
         <p className="text-lg">No loans found</p>
         <p className="mt-1">
-          {searchTerm || statusFilter || purposeFilter
-            ? 'Try adjusting your filters.'
-            : 'Create your first loan to get started.'}
+          {hasActiveFilters ? 'Try adjusting your filters.' : 'Create your first loan to get started.'}
         </p>
-        {!searchTerm && !statusFilter && !purposeFilter && (
+        {!hasActiveFilters && (
           <Button asChild className="mt-4">
             <Link href="/loans/new">Create Loan</Link>
           </Button>
@@ -158,7 +115,7 @@ export function LoanDataTable({
   return (
     <div className="flex flex-col flex-1 min-h-0">
       <div className="text-sm text-muted-foreground mb-4 shrink-0">
-        Showing {sortedLoans.length} of {total} loans
+        Showing {loans.length} of {total} loans
         {hasMore && ' (scroll for more)'}
       </div>
       <div ref={scrollContainerRef} className="flex-1 min-h-0 overflow-auto scrollbar-thin">
@@ -183,7 +140,7 @@ export function LoanDataTable({
             </TableRow>
           </TableHeader>
           <TableBody>
-            {sortedLoans.map((loan) => (
+            {loans.map((loan) => (
               <TableRow key={loan.id} className="relative hover:bg-muted/50 transition-colors cursor-pointer">
                 <TableCell>
                   <Link

@@ -4,15 +4,17 @@ import { LoanDataTable } from '@/app/components/LoanDataTable'
 import { LoanFilters } from '@/app/components/LoanFilters'
 import { Card, CardContent } from '@/app/components/ui/card'
 import { Skeleton } from '@/app/components/ui/skeleton'
+import { LOAN_PAGE_SIZE } from '@/lib/constants'
 import { getLoans } from '@/lib/data/loans'
-
-const PAGE_SIZE = 20
+import type { SortableColumn, SortOrder } from '@/lib/types/loans'
 
 interface LoansPageProps {
   searchParams: Promise<{
     search?: string
     status?: string
     purpose?: string
+    sortBy?: SortableColumn
+    sortOrder?: SortOrder
   }>
 }
 
@@ -22,15 +24,9 @@ async function LoansTableContent({
   searchParams: LoansPageProps['searchParams']
 }): Promise<React.ReactElement> {
   const params = await searchParams
-  const filters = {
-    search: params.search,
-    status: params.status,
-    purpose: params.purpose,
-  }
+  const { loans, total, hasMore } = await getLoans(0, LOAN_PAGE_SIZE, params)
 
-  const { loans, total, hasMore } = await getLoans(0, PAGE_SIZE, filters)
-
-  return <LoanDataTable initialLoans={loans} initialTotal={total} initialHasMore={hasMore} initialFilters={filters} />
+  return <LoanDataTable initial={{ loans, total, hasMore }} />
 }
 
 function TableSkeleton(): React.ReactElement {

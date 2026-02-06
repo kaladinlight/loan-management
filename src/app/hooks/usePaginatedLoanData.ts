@@ -1,15 +1,18 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 
 import { fetchMoreLoans } from '@/lib/actions/loan'
+import { LOAN_PAGE_SIZE } from '@/lib/constants'
 import type { Loan, PaginationFilters } from '@/lib/types'
 
+interface InitialData {
+  loans: Loan[]
+  total: number
+  hasMore: boolean
+}
+
 interface UsePaginatedLoanDataOptions {
-  initialLoans: Loan[]
-  initialTotal: number
-  initialHasMore: boolean
-  initialFilters: PaginationFilters
-  currentFilters: PaginationFilters
-  pageSize: number
+  initial: InitialData
+  filters: PaginationFilters
   onReset?: () => void
 }
 
@@ -22,35 +25,34 @@ interface UsePaginatedLoanDataReturn {
 }
 
 export function usePaginatedLoanData({
-  initialLoans,
-  initialTotal,
-  initialHasMore,
-  initialFilters,
-  currentFilters,
-  pageSize,
+  initial,
+  filters,
   onReset,
 }: UsePaginatedLoanDataOptions): UsePaginatedLoanDataReturn {
-  const [loans, setLoans] = useState<Loan[]>(initialLoans)
-  const [total, setTotal] = useState(initialTotal)
-  const [hasMore, setHasMore] = useState(initialHasMore)
+  const [loans, setLoans] = useState<Loan[]>(initial.loans)
+  const [total, setTotal] = useState(initial.total)
+  const [hasMore, setHasMore] = useState(initial.hasMore)
   const [isLoading, setIsLoading] = useState(false)
-  const appliedFiltersRef = useRef<PaginationFilters>(initialFilters)
+  const appliedFiltersRef = useRef<PaginationFilters>(filters)
 
   // Reset data when filters change
   useEffect(() => {
-    const filtersChanged =
-      currentFilters.search !== appliedFiltersRef.current.search ||
-      currentFilters.status !== appliedFiltersRef.current.status ||
-      currentFilters.purpose !== appliedFiltersRef.current.purpose
+    const prev = appliedFiltersRef.current
+    const changed =
+      filters.search !== prev.search ||
+      filters.status !== prev.status ||
+      filters.purpose !== prev.purpose ||
+      filters.sortBy !== prev.sortBy ||
+      filters.sortOrder !== prev.sortOrder
 
-    if (!filtersChanged) return
+    if (!changed) return
 
-    appliedFiltersRef.current = currentFilters
+    appliedFiltersRef.current = filters
 
     const fetchData = async () => {
       setIsLoading(true)
       try {
-        const result = await fetchMoreLoans(0, pageSize, currentFilters)
+        const result = await fetchMoreLoans(0, LOAN_PAGE_SIZE, filters)
         setLoans(result.loans)
         setHasMore(result.hasMore)
         setTotal(result.total)
@@ -61,21 +63,21 @@ export function usePaginatedLoanData({
     }
 
     fetchData()
-  }, [currentFilters, pageSize, onReset])
+  }, [filters, onReset])
 
   const loadMore = useCallback(async () => {
     if (isLoading || !hasMore) return
 
     setIsLoading(true)
     try {
-      const result = await fetchMoreLoans(loans.length, pageSize, appliedFiltersRef.current)
+      const result = await fetchMoreLoans(loans.length, LOAN_PAGE_SIZE, appliedFiltersRef.current)
       setLoans((prev) => [...prev, ...result.loans])
       setHasMore(result.hasMore)
       setTotal(result.total)
     } finally {
       setIsLoading(false)
     }
-  }, [loans.length, hasMore, isLoading, pageSize])
+  }, [loans.length, hasMore, isLoading])
 
   return { loans, total, hasMore, isLoading, loadMore }
 }

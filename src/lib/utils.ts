@@ -1,5 +1,8 @@
-import { type ClassValue, clsx } from 'clsx'
+import type { ClassValue } from 'clsx'
+import { clsx } from 'clsx'
 import { twMerge } from 'tailwind-merge'
+
+import type { Loan, PrismaLoan } from './types/loans'
 
 export function cn(...inputs: ClassValue[]): string {
   return twMerge(clsx(inputs))
@@ -37,4 +40,12 @@ export function calculateMonthlyPayment(principal: number, annualRate: number, t
 
 export function calculateTotalRepayment(principal: number, annualRate: number, termMonths: number): number {
   return calculateMonthlyPayment(principal, annualRate, termMonths) * termMonths
+}
+
+export function serializeLoan(loan: PrismaLoan): Loan {
+  return {
+    ...loan,
+    amount: Number(loan.amount),
+    interestRate: Number(loan.interestRate),
+  }
 }

@@ -6,7 +6,8 @@ import { redirect } from 'next/navigation'
 import { getLoans } from '@/lib/data/loans'
 import { prisma } from '@/lib/db'
 import { loanSchema } from '@/lib/schemas/loan'
-import type { ActionState, PaginatedLoansResult, PaginationFilters } from '@/lib/types'
+import type { ActionState } from '@/lib/types'
+import type { PaginatedLoansResult, PaginationFilters } from '@/lib/types/loans'
 
 async function getNextLoanNumber(): Promise<string> {
   const result = await prisma.$queryRaw<[{ nextval: bigint }]>`SELECT nextval('loan_number_seq')`

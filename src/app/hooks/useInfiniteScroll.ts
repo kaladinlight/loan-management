@@ -32,7 +32,8 @@ export function useInfiniteScroll<T extends HTMLElement = HTMLDivElement, S exte
 
     const observer = new IntersectionObserver(
       (entries) => {
-        if (entries[0].isIntersecting && hasMore && !isLoading) {
+        const hasScrolled = scrollContainer.scrollTop > 0
+        if (entries[0].isIntersecting && hasMore && !isLoading && hasScrolled) {
           onLoadMore()
         }
       },
