@@ -2,12 +2,13 @@
 
 import Link from 'next/link'
 import { useSearchParams } from 'next/navigation'
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { useMemo, useRef } from 'react'
 
 import { LoanStatusBadge } from '@/app/components/LoanStatusBadge'
 import { Button } from '@/app/components/ui/button'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/app/components/ui/table'
-import { fetchMoreLoans } from '@/lib/actions/loan'
+import { useInfiniteScroll } from '@/app/hooks/useInfiniteScroll'
+import { usePaginatedLoanData } from '@/app/hooks/usePaginatedLoanData'
 import type { Loan, PaginationFilters } from '@/lib/types'
 import { formatCurrency, formatDate } from '@/lib/utils'
 
@@ -40,14 +41,6 @@ export function LoanDataTable({
   initialFilters,
 }: LoanDataTableProps): React.ReactElement {
   const searchParams = useSearchParams()
-
-  const [allLoans, setAllLoans] = useState<Loan[]>(initialLoans)
-  const [hasMore, setHasMore] = useState(initialHasMore)
-  const [isLoading, setIsLoading] = useState(false)
-  const [total, setTotal] = useState(initialTotal)
-  const [currentFilters, setCurrentFilters] = useState<PaginationFilters>(initialFilters)
-
-  const sentinelRef = useRef<HTMLDivElement>(null)
   const scrollContainerRef = useRef<HTMLDivElement>(null)
 
   const currentSortBy = searchParams.get('sortBy')
@@ -56,41 +49,42 @@ export function LoanDataTable({
   const statusFilter = searchParams.get('status') ?? ''
   const purposeFilter = searchParams.get('purpose') ?? ''
 
-  // Reset data when filters change
-  useEffect(() => {
-    const newFilters: PaginationFilters = {
+  const currentFilters: PaginationFilters = useMemo(
+    () => ({
       search: searchTerm || undefined,
       status: statusFilter || undefined,
       purpose: purposeFilter || undefined,
-    }
+    }),
+    [searchTerm, statusFilter, purposeFilter],
+  )
 
-    const filtersChanged =
-      newFilters.search !== currentFilters.search ||
-      newFilters.status !== currentFilters.status ||
-      newFilters.purpose !== currentFilters.purpose
-
-    if (filtersChanged) {
-      setCurrentFilters(newFilters)
-      setIsLoading(true)
-
-      fetchMoreLoans(0, PAGE_SIZE, newFilters)
-        .then((result) => {
-          setAllLoans(result.loans)
-          setHasMore(result.hasMore)
-          setTotal(result.total)
-        })
-        .finally(() => {
-          setIsLoading(false)
-        })
-
-      // Scroll to top when filters change
+  const handleReset = useMemo(
+    () => () => {
       scrollContainerRef.current?.scrollTo(0, 0)
-    }
-  }, [searchTerm, statusFilter, purposeFilter, currentFilters])
+    },
+    [],
+  )
+
+  const { loans, total, hasMore, isLoading, loadMore } = usePaginatedLoanData({
+    initialLoans,
+    initialTotal,
+    initialHasMore,
+    initialFilters,
+    currentFilters,
+    pageSize: PAGE_SIZE,
+    onReset: handleReset,
+  })
+
+  const { sentinelRef } = useInfiniteScroll({
+    hasMore,
+    isLoading,
+    onLoadMore: loadMore,
+    scrollContainerRef,
+  })
 
   // Client-side sorting only (no filtering - server handles that)
   const sortedLoans = useMemo(() => {
-    const result = [...allLoans]
+    const result = [...loans]
 
     const sortBy = currentSortBy ?? 'createdAt'
     const sortOrder = currentSortOrder ?? 'desc'
@@ -113,43 +107,7 @@ export function LoanDataTable({
     })
 
     return result
-  }, [allLoans, currentSortBy, currentSortOrder])
-
-  const loadMore = useCallback(async () => {
-    if (isLoading || !hasMore) return
-
-    setIsLoading(true)
-    try {
-      const result = await fetchMoreLoans(allLoans.length, PAGE_SIZE, currentFilters)
-      setAllLoans((prev) => {
-        const existingIds = new Set(prev.map((l) => l.id))
-        const newLoans = result.loans.filter((l) => !existingIds.has(l.id))
-        return [...prev, ...newLoans]
-      })
-      setHasMore(result.hasMore)
-      setTotal(result.total)
-    } finally {
-      setIsLoading(false)
-    }
-  }, [allLoans.length, hasMore, isLoading, currentFilters])
-
-  useEffect(() => {
-    const sentinel = sentinelRef.current
-    const scrollContainer = scrollContainerRef.current
-    if (!sentinel || !scrollContainer) return
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        if (entries[0].isIntersecting && hasMore && !isLoading) {
-          loadMore()
-        }
-      },
-      { root: scrollContainer, rootMargin: '100px' },
-    )
-
-    observer.observe(sentinel)
-    return () => observer.disconnect()
-  }, [hasMore, isLoading, loadMore])
+  }, [loans, currentSortBy, currentSortOrder])
 
   const handleSort = (column: SortableColumn): void => {
     const params = new URLSearchParams(searchParams.toString())
@@ -179,7 +137,7 @@ export function LoanDataTable({
     )
   }
 
-  if (allLoans.length === 0 && !isLoading) {
+  if (loans.length === 0 && !isLoading) {
     return (
       <div className="text-center py-12 text-muted-foreground">
         <p className="text-lg">No loans found</p>
@@ -256,7 +214,7 @@ export function LoanDataTable({
               <span>Loading...</span>
             </div>
           )}
-          {!hasMore && allLoans.length > 0 && !isLoading && (
+          {!hasMore && loans.length > 0 && !isLoading && (
             <span className="text-sm text-muted-foreground">All loans loaded</span>
           )}
         </div>
