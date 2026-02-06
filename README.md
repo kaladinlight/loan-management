@@ -1,5 +1,7 @@
 # Loan Management
 
+[![CI](https://github.com/kaladinlight/loan-management/actions/workflows/ci.yml/badge.svg)](https://github.com/kaladinlight/loan-management/actions/workflows/ci.yml)
+
 A full-stack Next.js application for creating, viewing, and managing loans.
 
 ## Tech Stack

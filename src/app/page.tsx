@@ -8,6 +8,8 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { getDashboardStats } from '@/lib/data/loans'
 import { formatCompactCurrency, formatDate } from '@/lib/utils'
 
+export const dynamic = 'force-dynamic'
+
 export default async function DashboardPage(): Promise<React.ReactElement> {
   const stats = await getDashboardStats()
 
