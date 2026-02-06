@@ -78,7 +78,7 @@ export async function updateLoan(id: string, _prevState: ActionState, formData: 
   redirect(`/loans/${loan.loanNumber}`);
 }
 
-export async function deleteLoan(id: string): Promise<ActionState> {
+export async function deleteLoan(id: string): Promise<void> {
   await prisma.loan.delete({ where: { id } });
 
   revalidatePath('/');

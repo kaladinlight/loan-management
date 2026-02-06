@@ -14,7 +14,7 @@ const inter = Inter({
 
 export const metadata: Metadata = {
   title: 'Loan Management',
-  description: 'A full-stack application for creating, viewing, and managing loans',
+  description: 'An application for creating, viewing, and managing loans',
 };
 
 export default function RootLayout({
@@ -24,10 +24,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`${inter.variable} font-sans antialiased bg-background h-screen flex flex-col overflow-hidden`}>
+      <body className={`${inter.variable} font-sans antialiased bg-background min-h-screen flex flex-col`}>
         <ThemeProvider>
           <Header />
-          <main className="container mx-auto px-4 py-8 flex-1 overflow-hidden flex flex-col">{children}</main>
+          <main className="container mx-auto px-4 py-8 flex-1 flex flex-col overflow-auto">{children}</main>
           <Toaster position="top-right" />
         </ThemeProvider>
       </body>

@@ -1,7 +1,8 @@
 'use client';
 
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useActionState } from 'react';
+import type { BaseSyntheticEvent } from 'react';
+import { startTransition, useActionState } from 'react';
 import { type Resolver, useForm, useWatch } from 'react-hook-form';
 
 import { Button } from '@/app/components/ui/button';
@@ -36,15 +37,41 @@ interface LoanFormProps {
 export function LoanForm({ loan, action, submitLabel }: LoanFormProps): React.ReactElement {
   const [state, formAction, isPending] = useActionState(action, { success: true });
 
+  const formatDateForInput = (date: Date | string | undefined): string => {
+    if (!date) return '';
+    const d = new Date(date);
+    return d.toISOString().split('T')[0];
+  };
+
+  const getDefaultValues = (): Partial<LoanFormData> | undefined => {
+    if (!loan) return undefined;
+    const parsed = loanSchema.parse(loan);
+    return {
+      ...parsed,
+      startDate: formatDateForInput(parsed.startDate) as unknown as Date,
+    };
+  };
+
   const {
     control,
     register,
     formState: { errors },
     setValue,
+    handleSubmit,
   } = useForm<LoanFormData>({
     resolver: zodResolver(loanSchema) as Resolver<LoanFormData>,
-    defaultValues: loan ? loanSchema.parse(loan) : undefined,
+    defaultValues: getDefaultValues(),
+    mode: 'onTouched',
   });
+
+  const onSubmit = (_data: LoanFormData, event?: BaseSyntheticEvent): void => {
+    if (event?.target) {
+      const formData = new FormData(event.target as HTMLFormElement);
+      startTransition(() => {
+        formAction(formData);
+      });
+    }
+  };
 
   const purposeValue = useWatch({ control, name: 'purpose' });
   const statusValue = useWatch({ control, name: 'status' });
@@ -55,19 +82,13 @@ export function LoanForm({ loan, action, submitLabel }: LoanFormProps): React.Re
     return clientError ?? serverError;
   };
 
-  const formatDateForInput = (date: Date | string | undefined): string => {
-    if (!date) return '';
-    const d = new Date(date);
-    return d.toISOString().split('T')[0];
-  };
-
   return (
     <Card>
       <CardHeader>
         <CardTitle>{loan ? `Loan ${loan.loanNumber}` : 'Create New Loan'}</CardTitle>
       </CardHeader>
       <CardContent>
-        <form action={formAction} className="space-y-6">
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
           <div className="grid gap-6 md:grid-cols-2">
             <div className="space-y-2">
               <Label htmlFor="borrowerName">Borrower Name</Label>
@@ -211,7 +232,6 @@ export function LoanForm({ loan, action, submitLabel }: LoanFormProps): React.Re
                 id="startDate"
                 type="date"
                 {...register('startDate')}
-                defaultValue={formatDateForInput(loan?.startDate)}
                 aria-describedby={getFieldError('startDate') ? 'startDate-error' : undefined}
               />
               {getFieldError('startDate') && (
