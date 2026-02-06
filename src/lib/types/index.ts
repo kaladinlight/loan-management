@@ -1,3 +1,5 @@
+export type * from './loans'
+
 export interface ActionState {
   success: boolean
   error?: string

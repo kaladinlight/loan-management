@@ -64,6 +64,7 @@ export function LoanFilters(): React.ReactElement {
     startTransition(() => {
       router.push(`/loans?${params.toString()}`)
     })
+    // Only trigger on debouncedSearch changes; router/searchParams are stable or would cause loops
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [debouncedSearch])
 

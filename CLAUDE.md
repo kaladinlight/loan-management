@@ -43,6 +43,13 @@ prisma.config.ts    # Prisma configuration (project root)
 - Use `error` instead of `required_error` in schema params
 - e.g. `z.enum([...], { error: 'Field is required' })`
 
+## Enums and Constants
+
+- `LoanPurpose` and `LoanStatus` enums are defined in `prisma/schema.prisma` (single source of truth)
+- `src/lib/constants.ts` defines label mappings using `Record<LoanPurpose, string>` with type-only imports
+- Type-only imports (`import type`) avoid bundling Prisma runtime in client components
+- Adding a new enum value in Prisma requires updating the corresponding label record (TypeScript enforces this)
+
 ## Workflow
 
 - Do not run `yarn lint` or `yarn build` after making changes — the dev server handles this automatically
@@ -61,8 +68,10 @@ prisma.config.ts    # Prisma configuration (project root)
 
 - `yarn dev` — start dev server
 - `yarn build` — production build
+- `yarn start` — start production server
 - `yarn lint` — run ESLint (includes formatting checks)
 - `yarn lint:fix` — fix lint and formatting issues
+- `yarn clean` — remove .next, node_modules, and generated directories
 - `yarn prisma:generate` — regenerate Prisma client
 - `yarn prisma:migrate` — run database migrations
 - `yarn prisma:studio` — open Prisma Studio GUI
