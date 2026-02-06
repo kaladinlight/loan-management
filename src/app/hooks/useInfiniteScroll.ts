@@ -24,7 +24,14 @@ export function useInfiniteScroll<T extends HTMLElement = HTMLDivElement, S exte
   const sentinelRef = useRef<T>(null)
   const internalScrollContainerRef = useRef<S>(null)
   const scrollContainerRef = externalScrollContainerRef ?? internalScrollContainerRef
+  const hasMounted = useRef(false)
 
+  // Mark as mounted after initial render
+  useEffect(() => {
+    hasMounted.current = true
+  }, [])
+
+  // Standard intersection observer for scroll-based loading
   useEffect(() => {
     const sentinel = sentinelRef.current
     const scrollContainer = scrollContainerRef.current
@@ -43,6 +50,19 @@ export function useInfiniteScroll<T extends HTMLElement = HTMLDivElement, S exte
     observer.observe(sentinel)
     return () => observer.disconnect()
   }, [hasMore, isLoading, onLoadMore, rootMargin, scrollContainerRef])
+
+  // Auto-load when content fits in viewport without scrolling
+  useEffect(() => {
+    if (!hasMounted.current || isLoading || !hasMore) return
+
+    const scrollContainer = scrollContainerRef.current
+    if (!scrollContainer) return
+
+    const canScroll = scrollContainer.scrollHeight > scrollContainer.clientHeight
+    if (!canScroll) {
+      onLoadMore()
+    }
+  }, [hasMore, isLoading, onLoadMore, scrollContainerRef])
 
   return { sentinelRef, scrollContainerRef }
 }

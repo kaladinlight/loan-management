@@ -89,7 +89,7 @@ export async function getLoans(
   const [loans, total] = await Promise.all([
     prisma.loan.findMany({
       where,
-      orderBy: [{ [sortBy]: sortOrder }, { id: 'asc' }],
+      orderBy: [{ [sortBy]: sortOrder }, { id: 'desc' }],
       skip: offset,
       take: limit,
     }),
