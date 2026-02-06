@@ -3,7 +3,8 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import type { BaseSyntheticEvent } from 'react'
 import { startTransition, useActionState } from 'react'
-import { type Resolver, useForm, useWatch } from 'react-hook-form'
+import type { Resolver } from 'react-hook-form'
+import { useForm, useWatch } from 'react-hook-form'
 
 import { Button } from '@/app/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/app/components/ui/card'
@@ -11,7 +12,8 @@ import { Input } from '@/app/components/ui/input'
 import { Label } from '@/app/components/ui/label'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/app/components/ui/select'
 import { LOAN_PURPOSE_OPTIONS, LOAN_STATUS_OPTIONS } from '@/lib/constants'
-import { type LoanFormData, loanSchema } from '@/lib/schemas/loan'
+import type { LoanFormData } from '@/lib/schemas/loan'
+import { loanSchema } from '@/lib/schemas/loan'
 import type { ActionState, Loan } from '@/lib/types'
 
 interface LoanFormProps {

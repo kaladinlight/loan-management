@@ -1,4 +1,5 @@
-import { type LoanPurpose, LoanStatus, type Prisma } from '@/generated/prisma/client'
+import type { LoanPurpose, Prisma } from '@/generated/prisma/client'
+import { LoanStatus } from '@/generated/prisma/client'
 import { prisma } from '@/lib/db'
 import type { DashboardStats, Loan, PaginatedLoansResult, PaginationFilters } from '@/lib/types/loans'
 import { serializeLoan } from '@/lib/utils'
