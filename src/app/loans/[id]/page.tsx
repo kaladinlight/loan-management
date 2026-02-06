@@ -1,28 +1,28 @@
-import Link from 'next/link';
-import { notFound } from 'next/navigation';
+import Link from 'next/link'
+import { notFound } from 'next/navigation'
 
-import { DeleteLoanDialog } from '@/app/components/DeleteLoanDialog';
-import { LoanStatusBadge } from '@/app/components/LoanStatusBadge';
-import { Button } from '@/app/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/app/components/ui/card';
-import { Separator } from '@/app/components/ui/separator';
-import { getLoanByNumber } from '@/lib/data/loans';
-import { calculateMonthlyPayment, calculateTotalRepayment, formatCurrency, formatDate } from '@/lib/utils';
+import { DeleteLoanDialog } from '@/app/components/DeleteLoanDialog'
+import { LoanStatusBadge } from '@/app/components/LoanStatusBadge'
+import { Button } from '@/app/components/ui/button'
+import { Card, CardContent, CardHeader, CardTitle } from '@/app/components/ui/card'
+import { Separator } from '@/app/components/ui/separator'
+import { getLoanByNumber } from '@/lib/data/loans'
+import { calculateMonthlyPayment, calculateTotalRepayment, formatCurrency, formatDate } from '@/lib/utils'
 
 interface LoanDetailPageProps {
-  params: Promise<{ id: string }>;
+  params: Promise<{ id: string }>
 }
 
 export default async function LoanDetailPage({ params }: LoanDetailPageProps): Promise<React.ReactElement> {
-  const { id: loanNumber } = await params;
-  const loan = await getLoanByNumber(loanNumber);
+  const { id: loanNumber } = await params
+  const loan = await getLoanByNumber(loanNumber)
 
   if (!loan) {
-    notFound();
+    notFound()
   }
 
-  const monthlyPayment = calculateMonthlyPayment(loan.amount, loan.interestRate, loan.term);
-  const totalRepayment = calculateTotalRepayment(loan.amount, loan.interestRate, loan.term);
+  const monthlyPayment = calculateMonthlyPayment(loan.amount, loan.interestRate, loan.term)
+  const totalRepayment = calculateTotalRepayment(loan.amount, loan.interestRate, loan.term)
 
   return (
     <div className="space-y-6">
@@ -128,5 +128,5 @@ export default async function LoanDetailPage({ params }: LoanDetailPageProps): P
         </Card>
       </div>
     </div>
-  );
+  )
 }

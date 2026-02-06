@@ -1,10 +1,10 @@
-'use client';
+'use client'
 
-import { isRedirectError } from 'next/dist/client/components/redirect-error';
-import { useState, useTransition } from 'react';
-import { toast } from 'sonner';
+import { isRedirectError } from 'next/dist/client/components/redirect-error'
+import { useState, useTransition } from 'react'
+import { toast } from 'sonner'
 
-import { Button } from '@/app/components/ui/button';
+import { Button } from '@/app/components/ui/button'
 import {
   Dialog,
   DialogContent,
@@ -13,32 +13,32 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from '@/app/components/ui/dialog';
-import { deleteLoan } from '@/lib/actions/loan';
+} from '@/app/components/ui/dialog'
+import { deleteLoan } from '@/lib/actions/loan'
 
 interface DeleteLoanDialogProps {
-  loanId: string;
-  loanNumber: string;
+  loanId: string
+  loanNumber: string
 }
 
 export function DeleteLoanDialog({ loanId, loanNumber }: DeleteLoanDialogProps): React.ReactElement {
-  const [open, setOpen] = useState(false);
-  const [isPending, startTransition] = useTransition();
+  const [open, setOpen] = useState(false)
+  const [isPending, startTransition] = useTransition()
 
   const handleDelete = (): void => {
     startTransition(async () => {
       try {
-        await deleteLoan(loanId);
+        await deleteLoan(loanId)
       } catch (error) {
         if (isRedirectError(error)) {
-          toast.success(`Loan ${loanNumber} deleted successfully`);
-          throw error;
+          toast.success(`Loan ${loanNumber} deleted successfully`)
+          throw error
         }
-        toast.error('Failed to delete loan');
-        setOpen(false);
+        toast.error('Failed to delete loan')
+        setOpen(false)
       }
-    });
-  };
+    })
+  }
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -62,5 +62,5 @@ export function DeleteLoanDialog({ loanId, loanNumber }: DeleteLoanDialogProps):
         </DialogFooter>
       </DialogContent>
     </Dialog>
-  );
+  )
 }

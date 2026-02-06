@@ -1,19 +1,19 @@
-'use client';
+'use client'
 
-import Link from 'next/link';
-import { useEffect } from 'react';
+import Link from 'next/link'
+import { useEffect } from 'react'
 
-import { Button } from '@/app/components/ui/button';
+import { Button } from '@/app/components/ui/button'
 
 interface ErrorProps {
-  error: Error & { digest?: string };
-  reset: () => void;
+  error: Error & { digest?: string }
+  reset: () => void
 }
 
 export default function LoanDetailError({ error, reset }: ErrorProps): React.ReactElement {
   useEffect(() => {
-    console.error('Loan detail error:', error);
-  }, [error]);
+    console.error('Loan detail error:', error)
+  }, [error])
 
   return (
     <div className="flex flex-col items-center justify-center min-h-[60vh] text-center">
@@ -27,5 +27,5 @@ export default function LoanDetailError({ error, reset }: ErrorProps): React.Rea
         </Button>
       </div>
     </div>
-  );
+  )
 }

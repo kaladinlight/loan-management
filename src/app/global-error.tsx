@@ -1,18 +1,18 @@
-'use client';
+'use client'
 
-import { useEffect } from 'react';
+import { useEffect } from 'react'
 
-import { Button } from '@/app/components/ui/button';
+import { Button } from '@/app/components/ui/button'
 
 interface GlobalErrorProps {
-  error: Error & { digest?: string };
-  reset: () => void;
+  error: Error & { digest?: string }
+  reset: () => void
 }
 
 export default function GlobalError({ error, reset }: GlobalErrorProps): React.ReactElement {
   useEffect(() => {
-    console.error('Global error:', error);
-  }, [error]);
+    console.error('Global error:', error)
+  }, [error])
 
   return (
     <html lang="en">
@@ -29,5 +29,5 @@ export default function GlobalError({ error, reset }: GlobalErrorProps): React.R
         </div>
       </body>
     </html>
-  );
+  )
 }

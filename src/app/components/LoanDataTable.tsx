@@ -1,26 +1,26 @@
-'use client';
+'use client'
 
-import Link from 'next/link';
-import { useSearchParams } from 'next/navigation';
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import Link from 'next/link'
+import { useSearchParams } from 'next/navigation'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 
-import { LoanStatusBadge } from '@/app/components/LoanStatusBadge';
-import { Button } from '@/app/components/ui/button';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/app/components/ui/table';
-import { fetchMoreLoans } from '@/lib/actions/loan';
-import type { Loan, PaginationFilters } from '@/lib/types';
-import { formatCurrency, formatDate } from '@/lib/utils';
+import { LoanStatusBadge } from '@/app/components/LoanStatusBadge'
+import { Button } from '@/app/components/ui/button'
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/app/components/ui/table'
+import { fetchMoreLoans } from '@/lib/actions/loan'
+import type { Loan, PaginationFilters } from '@/lib/types'
+import { formatCurrency, formatDate } from '@/lib/utils'
 
-const PAGE_SIZE = 20;
+const PAGE_SIZE = 20
 
 interface LoanDataTableProps {
-  initialLoans: Loan[];
-  initialTotal: number;
-  initialHasMore: boolean;
-  initialFilters: PaginationFilters;
+  initialLoans: Loan[]
+  initialTotal: number
+  initialHasMore: boolean
+  initialFilters: PaginationFilters
 }
 
-type SortableColumn = 'loanNumber' | 'borrowerName' | 'amount' | 'interestRate' | 'term' | 'startDate';
+type SortableColumn = 'loanNumber' | 'borrowerName' | 'amount' | 'interestRate' | 'term' | 'startDate'
 
 const COLUMNS: { key: SortableColumn | 'purpose' | 'status'; label: string; sortable: boolean; align?: 'right' }[] = [
   { key: 'loanNumber', label: 'Loan Number', sortable: true },
@@ -31,7 +31,7 @@ const COLUMNS: { key: SortableColumn | 'purpose' | 'status'; label: string; sort
   { key: 'term', label: 'Term', sortable: true, align: 'right' },
   { key: 'status', label: 'Status', sortable: false },
   { key: 'startDate', label: 'Start Date', sortable: true },
-];
+]
 
 export function LoanDataTable({
   initialLoans,
@@ -39,22 +39,22 @@ export function LoanDataTable({
   initialHasMore,
   initialFilters,
 }: LoanDataTableProps): React.ReactElement {
-  const searchParams = useSearchParams();
+  const searchParams = useSearchParams()
 
-  const [allLoans, setAllLoans] = useState<Loan[]>(initialLoans);
-  const [hasMore, setHasMore] = useState(initialHasMore);
-  const [isLoading, setIsLoading] = useState(false);
-  const [total, setTotal] = useState(initialTotal);
-  const [currentFilters, setCurrentFilters] = useState<PaginationFilters>(initialFilters);
+  const [allLoans, setAllLoans] = useState<Loan[]>(initialLoans)
+  const [hasMore, setHasMore] = useState(initialHasMore)
+  const [isLoading, setIsLoading] = useState(false)
+  const [total, setTotal] = useState(initialTotal)
+  const [currentFilters, setCurrentFilters] = useState<PaginationFilters>(initialFilters)
 
-  const sentinelRef = useRef<HTMLDivElement>(null);
-  const scrollContainerRef = useRef<HTMLDivElement>(null);
+  const sentinelRef = useRef<HTMLDivElement>(null)
+  const scrollContainerRef = useRef<HTMLDivElement>(null)
 
-  const currentSortBy = searchParams.get('sortBy');
-  const currentSortOrder = searchParams.get('sortOrder') as 'asc' | 'desc' | null;
-  const searchTerm = searchParams.get('search') ?? '';
-  const statusFilter = searchParams.get('status') ?? '';
-  const purposeFilter = searchParams.get('purpose') ?? '';
+  const currentSortBy = searchParams.get('sortBy')
+  const currentSortOrder = searchParams.get('sortOrder') as 'asc' | 'desc' | null
+  const searchTerm = searchParams.get('search') ?? ''
+  const statusFilter = searchParams.get('status') ?? ''
+  const purposeFilter = searchParams.get('purpose') ?? ''
 
   // Reset data when filters change
   useEffect(() => {
@@ -62,122 +62,122 @@ export function LoanDataTable({
       search: searchTerm || undefined,
       status: statusFilter || undefined,
       purpose: purposeFilter || undefined,
-    };
+    }
 
     const filtersChanged =
       newFilters.search !== currentFilters.search ||
       newFilters.status !== currentFilters.status ||
-      newFilters.purpose !== currentFilters.purpose;
+      newFilters.purpose !== currentFilters.purpose
 
     if (filtersChanged) {
-      setCurrentFilters(newFilters);
-      setIsLoading(true);
+      setCurrentFilters(newFilters)
+      setIsLoading(true)
 
       fetchMoreLoans(0, PAGE_SIZE, newFilters)
         .then((result) => {
-          setAllLoans(result.loans);
-          setHasMore(result.hasMore);
-          setTotal(result.total);
+          setAllLoans(result.loans)
+          setHasMore(result.hasMore)
+          setTotal(result.total)
         })
         .finally(() => {
-          setIsLoading(false);
-        });
+          setIsLoading(false)
+        })
 
       // Scroll to top when filters change
-      scrollContainerRef.current?.scrollTo(0, 0);
+      scrollContainerRef.current?.scrollTo(0, 0)
     }
-  }, [searchTerm, statusFilter, purposeFilter, currentFilters]);
+  }, [searchTerm, statusFilter, purposeFilter, currentFilters])
 
   // Client-side sorting only (no filtering - server handles that)
   const sortedLoans = useMemo(() => {
-    const result = [...allLoans];
+    const result = [...allLoans]
 
-    const sortBy = currentSortBy ?? 'createdAt';
-    const sortOrder = currentSortOrder ?? 'desc';
+    const sortBy = currentSortBy ?? 'createdAt'
+    const sortOrder = currentSortOrder ?? 'desc'
 
     result.sort((a, b) => {
-      let aVal: string | number | Date = a[sortBy as keyof Loan] as string | number | Date;
-      let bVal: string | number | Date = b[sortBy as keyof Loan] as string | number | Date;
+      let aVal: string | number | Date = a[sortBy as keyof Loan] as string | number | Date
+      let bVal: string | number | Date = b[sortBy as keyof Loan] as string | number | Date
 
-      if (aVal instanceof Date) aVal = aVal.getTime();
-      if (bVal instanceof Date) bVal = bVal.getTime();
+      if (aVal instanceof Date) aVal = aVal.getTime()
+      if (bVal instanceof Date) bVal = bVal.getTime()
 
       if (typeof aVal === 'string') {
-        aVal = aVal.toLowerCase();
-        bVal = (bVal as string).toLowerCase();
+        aVal = aVal.toLowerCase()
+        bVal = (bVal as string).toLowerCase()
       }
 
-      if (aVal < bVal) return sortOrder === 'asc' ? -1 : 1;
-      if (aVal > bVal) return sortOrder === 'asc' ? 1 : -1;
-      return 0;
-    });
+      if (aVal < bVal) return sortOrder === 'asc' ? -1 : 1
+      if (aVal > bVal) return sortOrder === 'asc' ? 1 : -1
+      return 0
+    })
 
-    return result;
-  }, [allLoans, currentSortBy, currentSortOrder]);
+    return result
+  }, [allLoans, currentSortBy, currentSortOrder])
 
   const loadMore = useCallback(async () => {
-    if (isLoading || !hasMore) return;
+    if (isLoading || !hasMore) return
 
-    setIsLoading(true);
+    setIsLoading(true)
     try {
-      const result = await fetchMoreLoans(allLoans.length, PAGE_SIZE, currentFilters);
+      const result = await fetchMoreLoans(allLoans.length, PAGE_SIZE, currentFilters)
       setAllLoans((prev) => {
-        const existingIds = new Set(prev.map((l) => l.id));
-        const newLoans = result.loans.filter((l) => !existingIds.has(l.id));
-        return [...prev, ...newLoans];
-      });
-      setHasMore(result.hasMore);
-      setTotal(result.total);
+        const existingIds = new Set(prev.map((l) => l.id))
+        const newLoans = result.loans.filter((l) => !existingIds.has(l.id))
+        return [...prev, ...newLoans]
+      })
+      setHasMore(result.hasMore)
+      setTotal(result.total)
     } finally {
-      setIsLoading(false);
+      setIsLoading(false)
     }
-  }, [allLoans.length, hasMore, isLoading, currentFilters]);
+  }, [allLoans.length, hasMore, isLoading, currentFilters])
 
   useEffect(() => {
-    const sentinel = sentinelRef.current;
-    const scrollContainer = scrollContainerRef.current;
-    if (!sentinel || !scrollContainer) return;
+    const sentinel = sentinelRef.current
+    const scrollContainer = scrollContainerRef.current
+    if (!sentinel || !scrollContainer) return
 
     const observer = new IntersectionObserver(
       (entries) => {
         if (entries[0].isIntersecting && hasMore && !isLoading) {
-          loadMore();
+          loadMore()
         }
       },
       { root: scrollContainer, rootMargin: '100px' },
-    );
+    )
 
-    observer.observe(sentinel);
-    return () => observer.disconnect();
-  }, [hasMore, isLoading, loadMore]);
+    observer.observe(sentinel)
+    return () => observer.disconnect()
+  }, [hasMore, isLoading, loadMore])
 
   const handleSort = (column: SortableColumn): void => {
-    const params = new URLSearchParams(searchParams.toString());
+    const params = new URLSearchParams(searchParams.toString())
 
     if (currentSortBy !== column) {
-      params.set('sortBy', column);
-      params.set('sortOrder', 'asc');
+      params.set('sortBy', column)
+      params.set('sortOrder', 'asc')
     } else if (currentSortOrder === 'asc') {
-      params.set('sortBy', column);
-      params.set('sortOrder', 'desc');
+      params.set('sortBy', column)
+      params.set('sortOrder', 'desc')
     } else {
-      params.delete('sortBy');
-      params.delete('sortOrder');
+      params.delete('sortBy')
+      params.delete('sortOrder')
     }
 
-    window.history.replaceState(null, '', `/loans?${params.toString()}`);
-    window.dispatchEvent(new PopStateEvent('popstate'));
-  };
+    window.history.replaceState(null, '', `/loans?${params.toString()}`)
+    window.dispatchEvent(new PopStateEvent('popstate'))
+  }
 
   const getSortIndicator = (column: string): React.ReactNode => {
-    const isActive = currentSortBy === column;
+    const isActive = currentSortBy === column
     return (
       <span className="ml-1 inline-flex flex-col leading-[0.5] text-[0.6em] align-middle">
         <span className={isActive && currentSortOrder === 'asc' ? '' : 'text-muted-foreground/40'}>↑</span>
         <span className={isActive && currentSortOrder === 'desc' ? '' : 'text-muted-foreground/40'}>↓</span>
       </span>
-    );
-  };
+    )
+  }
 
   if (allLoans.length === 0 && !isLoading) {
     return (
@@ -194,7 +194,7 @@ export function LoanDataTable({
           </Button>
         )}
       </div>
-    );
+    )
   }
 
   return (
@@ -262,5 +262,5 @@ export function LoanDataTable({
         </div>
       </div>
     </div>
-  );
+  )
 }

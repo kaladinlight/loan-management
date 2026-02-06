@@ -1,28 +1,28 @@
-import Link from 'next/link';
+import Link from 'next/link'
 
-import { LoanStatusBadge } from '@/app/components/LoanStatusBadge';
-import { StatCard } from '@/app/components/StatCard';
-import { Button } from '@/app/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/app/components/ui/card';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/app/components/ui/table';
-import { getDashboardStats } from '@/lib/data/loans';
-import { formatCurrency, formatDate } from '@/lib/utils';
+import { LoanStatusBadge } from '@/app/components/LoanStatusBadge'
+import { StatCard } from '@/app/components/StatCard'
+import { Button } from '@/app/components/ui/button'
+import { Card, CardContent, CardHeader, CardTitle } from '@/app/components/ui/card'
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/app/components/ui/table'
+import { getDashboardStats } from '@/lib/data/loans'
+import { formatCompactCurrency, formatDate } from '@/lib/utils'
 
 export default async function DashboardPage(): Promise<React.ReactElement> {
-  const stats = await getDashboardStats();
+  const stats = await getDashboardStats()
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-4 lg:space-y-8">
       <div>
         <h1 className="text-3xl font-bold tracking-tight">Dashboard</h1>
       </div>
 
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+      <div className="grid grid-cols-2 gap-3 lg:grid-cols-4 lg:gap-4">
         <StatCard title="Total Loans" value={stats.totalLoans} description="Total number of loans" />
         <StatCard
           title="Portfolio Value"
-          value={formatCurrency(stats.totalPortfolioValue)}
-          description="Total outstanding amount"
+          value={formatCompactCurrency(stats.totalPortfolioValue)}
+          description="Total outstanding"
         />
         <StatCard
           title="Active Loans"
@@ -72,7 +72,7 @@ export default async function DashboardPage(): Promise<React.ReactElement> {
                         </Link>
                       </TableCell>
                       <TableCell>{loan.borrowerName}</TableCell>
-                      <TableCell>{formatCurrency(loan.amount)}</TableCell>
+                      <TableCell>{formatCompactCurrency(loan.amount)}</TableCell>
                       <TableCell>
                         <LoanStatusBadge status={loan.status} />
                       </TableCell>
@@ -85,12 +85,6 @@ export default async function DashboardPage(): Promise<React.ReactElement> {
           )}
         </CardContent>
       </Card>
-
-      <div className="flex justify-center">
-        <Button asChild variant="outline">
-          <Link href="/loans">View All Loans</Link>
-        </Button>
-      </div>
     </div>
-  );
+  )
 }

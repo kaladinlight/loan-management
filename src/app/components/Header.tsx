@@ -1,10 +1,10 @@
-'use client';
+'use client'
 
-import dynamic from 'next/dynamic';
-import Link from 'next/link';
-import { useState } from 'react';
+import dynamic from 'next/dynamic'
+import Link from 'next/link'
+import { useState } from 'react'
 
-import { Button } from '@/app/components/ui/button';
+import { Button } from '@/app/components/ui/button'
 
 const ThemeToggle = dynamic(() => import('@/app/components/ThemeToggle').then((mod) => mod.ThemeToggle), {
   ssr: false,
@@ -13,13 +13,13 @@ const ThemeToggle = dynamic(() => import('@/app/components/ThemeToggle').then((m
       <span className="h-4 w-4" />
     </Button>
   ),
-});
+})
 
 export function Header(): React.ReactElement {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false)
 
   return (
-    <header className="bg-card border-b">
+    <header className="bg-card border-b shrink-0">
       <div className="container mx-auto px-4">
         <nav className="flex items-center justify-between h-16" aria-label="Main navigation">
           <Link href="/" className="text-xl font-semibold hover:text-muted-foreground transition-colors">
@@ -80,5 +80,5 @@ export function Header(): React.ReactElement {
         )}
       </div>
     </header>
-  );
+  )
 }

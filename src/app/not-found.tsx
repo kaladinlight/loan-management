@@ -1,6 +1,6 @@
-import Link from 'next/link';
+import Link from 'next/link'
 
-import { Button } from '@/app/components/ui/button';
+import { Button } from '@/app/components/ui/button'
 
 export default function NotFound(): React.ReactElement {
   return (
@@ -17,5 +17,5 @@ export default function NotFound(): React.ReactElement {
         </Button>
       </div>
     </div>
-  );
+  )
 }

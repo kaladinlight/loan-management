@@ -55,15 +55,14 @@ prisma.config.ts    # Prisma configuration (project root)
 - Default to Server Components; only use `"use client"` when interactivity is needed
 - One component per file, named exports, file name matches component name
 - Validate all server action inputs with Zod before database operations
-- Prettier: 120 char width, single quotes, trailing commas, 2-space indent
+- Formatting (via ESLint + Prettier plugin): 120 char width, single quotes, trailing commas, 2-space indent, no semicolons
 
 ## Commands
 
 - `yarn dev` — start dev server
 - `yarn build` — production build
-- `yarn lint` — run ESLint
-- `yarn format` — format code with Prettier
-- `yarn format:check` — check formatting
+- `yarn lint` — run ESLint (includes formatting checks)
+- `yarn lint:fix` — fix lint and formatting issues
 - `yarn prisma:generate` — regenerate Prisma client
 - `yarn prisma:migrate` — run database migrations
 - `yarn prisma:studio` — open Prisma Studio GUI

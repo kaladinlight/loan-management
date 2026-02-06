@@ -1,36 +1,36 @@
-import { Suspense } from 'react';
+import { Suspense } from 'react'
 
-import { LoanDataTable } from '@/app/components/LoanDataTable';
-import { LoanFilters } from '@/app/components/LoanFilters';
-import { Card, CardContent } from '@/app/components/ui/card';
-import { Skeleton } from '@/app/components/ui/skeleton';
-import { getLoans } from '@/lib/data/loans';
+import { LoanDataTable } from '@/app/components/LoanDataTable'
+import { LoanFilters } from '@/app/components/LoanFilters'
+import { Card, CardContent } from '@/app/components/ui/card'
+import { Skeleton } from '@/app/components/ui/skeleton'
+import { getLoans } from '@/lib/data/loans'
 
-const PAGE_SIZE = 20;
+const PAGE_SIZE = 20
 
 interface LoansPageProps {
   searchParams: Promise<{
-    search?: string;
-    status?: string;
-    purpose?: string;
-  }>;
+    search?: string
+    status?: string
+    purpose?: string
+  }>
 }
 
 async function LoansTableContent({
   searchParams,
 }: {
-  searchParams: LoansPageProps['searchParams'];
+  searchParams: LoansPageProps['searchParams']
 }): Promise<React.ReactElement> {
-  const params = await searchParams;
+  const params = await searchParams
   const filters = {
     search: params.search,
     status: params.status,
     purpose: params.purpose,
-  };
+  }
 
-  const { loans, total, hasMore } = await getLoans(0, PAGE_SIZE, filters);
+  const { loans, total, hasMore } = await getLoans(0, PAGE_SIZE, filters)
 
-  return <LoanDataTable initialLoans={loans} initialTotal={total} initialHasMore={hasMore} initialFilters={filters} />;
+  return <LoanDataTable initialLoans={loans} initialTotal={total} initialHasMore={hasMore} initialFilters={filters} />
 }
 
 function TableSkeleton(): React.ReactElement {
@@ -52,12 +52,12 @@ function TableSkeleton(): React.ReactElement {
         ))}
       </div>
     </div>
-  );
+  )
 }
 
 export default function LoansPage({ searchParams }: LoansPageProps): React.ReactElement {
   return (
-    <div className="flex flex-col flex-1 min-h-0 gap-6">
+    <div className="flex flex-col h-[calc(100dvh-8rem)] min-h-0 gap-6">
       <div className="shrink-0">
         <h1 className="text-3xl font-bold tracking-tight">Loans</h1>
       </div>
@@ -76,5 +76,5 @@ export default function LoansPage({ searchParams }: LoansPageProps): React.React
         </CardContent>
       </Card>
     </div>
-  );
+  )
 }

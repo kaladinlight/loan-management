@@ -1,42 +1,42 @@
-'use client';
+'use client'
 
-import { zodResolver } from '@hookform/resolvers/zod';
-import type { BaseSyntheticEvent } from 'react';
-import { startTransition, useActionState } from 'react';
-import { type Resolver, useForm, useWatch } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod'
+import type { BaseSyntheticEvent } from 'react'
+import { startTransition, useActionState } from 'react'
+import { type Resolver, useForm, useWatch } from 'react-hook-form'
 
-import { Button } from '@/app/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/app/components/ui/card';
-import { Input } from '@/app/components/ui/input';
-import { Label } from '@/app/components/ui/label';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/app/components/ui/select';
-import { LOAN_PURPOSE_OPTIONS, LOAN_STATUS_OPTIONS } from '@/lib/constants';
-import { type LoanFormData, loanSchema } from '@/lib/schemas/loan';
-import type { ActionState, Loan } from '@/lib/types';
+import { Button } from '@/app/components/ui/button'
+import { Card, CardContent, CardHeader, CardTitle } from '@/app/components/ui/card'
+import { Input } from '@/app/components/ui/input'
+import { Label } from '@/app/components/ui/label'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/app/components/ui/select'
+import { LOAN_PURPOSE_OPTIONS, LOAN_STATUS_OPTIONS } from '@/lib/constants'
+import { type LoanFormData, loanSchema } from '@/lib/schemas/loan'
+import type { ActionState, Loan } from '@/lib/types'
 
 interface LoanFormProps {
-  loan?: Loan;
-  action: (prevState: ActionState, formData: FormData) => Promise<ActionState>;
-  submitLabel: string;
+  loan?: Loan
+  action: (prevState: ActionState, formData: FormData) => Promise<ActionState>
+  submitLabel: string
 }
 
 export function LoanForm({ loan, action, submitLabel }: LoanFormProps): React.ReactElement {
-  const [state, formAction, isPending] = useActionState(action, { success: true });
+  const [state, formAction, isPending] = useActionState(action, { success: true })
 
   const formatDateForInput = (date: Date | string | undefined): string => {
-    if (!date) return '';
-    const d = new Date(date);
-    return d.toISOString().split('T')[0];
-  };
+    if (!date) return ''
+    const d = new Date(date)
+    return d.toISOString().split('T')[0]
+  }
 
   const getDefaultValues = (): Partial<LoanFormData> | undefined => {
-    if (!loan) return undefined;
-    const parsed = loanSchema.parse(loan);
+    if (!loan) return undefined
+    const parsed = loanSchema.parse(loan)
     return {
       ...parsed,
       startDate: formatDateForInput(parsed.startDate) as unknown as Date,
-    };
-  };
+    }
+  }
 
   const {
     control,
@@ -48,25 +48,25 @@ export function LoanForm({ loan, action, submitLabel }: LoanFormProps): React.Re
     resolver: zodResolver(loanSchema) as Resolver<LoanFormData>,
     defaultValues: getDefaultValues(),
     mode: 'onTouched',
-  });
+  })
 
   const onSubmit = (_data: LoanFormData, event?: BaseSyntheticEvent): void => {
     if (event?.target) {
-      const formData = new FormData(event.target as HTMLFormElement);
+      const formData = new FormData(event.target as HTMLFormElement)
       startTransition(() => {
-        formAction(formData);
-      });
+        formAction(formData)
+      })
     }
-  };
+  }
 
-  const purposeValue = useWatch({ control, name: 'purpose' });
-  const statusValue = useWatch({ control, name: 'status' });
+  const purposeValue = useWatch({ control, name: 'purpose' })
+  const statusValue = useWatch({ control, name: 'status' })
 
   const getFieldError = (field: string): string | undefined => {
-    const clientError = errors[field as keyof LoanFormData]?.message;
-    const serverError = state.fieldErrors?.[field]?.[0];
-    return clientError ?? serverError;
-  };
+    const clientError = errors[field as keyof LoanFormData]?.message
+    const serverError = state.fieldErrors?.[field]?.[0]
+    return clientError ?? serverError
+  }
 
   return (
     <Card>
@@ -243,5 +243,5 @@ export function LoanForm({ loan, action, submitLabel }: LoanFormProps): React.Re
         </form>
       </CardContent>
     </Card>
-  );
+  )
 }

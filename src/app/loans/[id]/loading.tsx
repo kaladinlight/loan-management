@@ -1,5 +1,5 @@
-import { Card, CardContent, CardHeader } from '@/app/components/ui/card';
-import { Skeleton } from '@/app/components/ui/skeleton';
+import { Card, CardContent, CardHeader } from '@/app/components/ui/card'
+import { Skeleton } from '@/app/components/ui/skeleton'
 
 export default function LoanDetailLoading(): React.ReactElement {
   return (
@@ -71,5 +71,5 @@ export default function LoanDetailLoading(): React.ReactElement {
         </Card>
       </div>
     </div>
-  );
+  )
 }

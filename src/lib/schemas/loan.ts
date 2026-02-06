@@ -1,4 +1,4 @@
-import { z } from 'zod';
+import { z } from 'zod'
 
 export const loanSchema = z.object({
   purpose: z.enum(['PERSONAL', 'MORTGAGE', 'AUTO', 'BUSINESS', 'OTHER'], {
@@ -26,6 +26,6 @@ export const loanSchema = z.object({
     error: 'Status is required',
   }),
   startDate: z.coerce.date({ error: 'Start date is required' }),
-});
+})
 
-export type LoanFormData = z.infer<typeof loanSchema>;
+export type LoanFormData = z.infer<typeof loanSchema>

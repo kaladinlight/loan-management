@@ -1,18 +1,18 @@
-'use client';
+'use client'
 
-import { useTheme } from 'next-themes';
+import { useTheme } from 'next-themes'
 
-import { Button } from '@/app/components/ui/button';
+import { Button } from '@/app/components/ui/button'
 
 export function ThemeToggle(): React.ReactElement {
-  const { theme, setTheme, resolvedTheme } = useTheme();
+  const { theme, setTheme, resolvedTheme } = useTheme()
 
   if (!resolvedTheme) {
     return (
       <Button variant="ghost" size="icon-sm" aria-label="Toggle theme">
         <span className="h-4 w-4" />
       </Button>
-    );
+    )
   }
 
   return (
@@ -42,5 +42,5 @@ export function ThemeToggle(): React.ReactElement {
         </svg>
       )}
     </Button>
-  );
+  )
 }

@@ -1,5 +1,5 @@
-import { Card, CardContent, CardHeader } from '@/app/components/ui/card';
-import { Skeleton } from '@/app/components/ui/skeleton';
+import { Card, CardContent, CardHeader } from '@/app/components/ui/card'
+import { Skeleton } from '@/app/components/ui/skeleton'
 
 export default function DashboardLoading(): React.ReactElement {
   return (
@@ -46,5 +46,5 @@ export default function DashboardLoading(): React.ReactElement {
         </CardContent>
       </Card>
     </div>
-  );
+  )
 }

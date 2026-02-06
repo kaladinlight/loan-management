@@ -1,11 +1,11 @@
-'use client';
+'use client'
 
-import { Filter, X } from 'lucide-react';
-import { useRouter, useSearchParams } from 'next/navigation';
-import { useEffect, useRef, useState, useTransition } from 'react';
+import { Filter, X } from 'lucide-react'
+import { useRouter, useSearchParams } from 'next/navigation'
+import { useEffect, useRef, useState, useTransition } from 'react'
 
-import { Badge } from '@/app/components/ui/badge';
-import { Button } from '@/app/components/ui/button';
+import { Badge } from '@/app/components/ui/badge'
+import { Button } from '@/app/components/ui/button'
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
@@ -13,97 +13,97 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from '@/app/components/ui/dropdown-menu';
-import { Input } from '@/app/components/ui/input';
-import { useDebounce } from '@/app/hooks/useDebounce';
-import { LOAN_PURPOSE_OPTIONS, LOAN_STATUS_OPTIONS } from '@/lib/constants';
+} from '@/app/components/ui/dropdown-menu'
+import { Input } from '@/app/components/ui/input'
+import { useDebounce } from '@/app/hooks/useDebounce'
+import { LOAN_PURPOSE_OPTIONS, LOAN_STATUS_OPTIONS } from '@/lib/constants'
 
 export function LoanFilters(): React.ReactElement {
-  const router = useRouter();
-  const searchParams = useSearchParams();
-  const [isPending, startTransition] = useTransition();
+  const router = useRouter()
+  const searchParams = useSearchParams()
+  const [isPending, startTransition] = useTransition()
 
-  const initialSearch = searchParams.get('search') ?? '';
-  const [search, setSearch] = useState(initialSearch);
-  const debouncedSearch = useDebounce(search, 300);
-  const isFirstRender = useRef(true);
+  const initialSearch = searchParams.get('search') ?? ''
+  const [search, setSearch] = useState(initialSearch)
+  const debouncedSearch = useDebounce(search, 300)
+  const isFirstRender = useRef(true)
 
-  const currentStatus = searchParams.get('status');
-  const currentPurpose = searchParams.get('purpose');
+  const currentStatus = searchParams.get('status')
+  const currentPurpose = searchParams.get('purpose')
 
-  const activeFilters: { type: 'status' | 'purpose'; value: string; label: string }[] = [];
+  const activeFilters: { type: 'status' | 'purpose'; value: string; label: string }[] = []
 
   if (currentStatus) {
-    const statusOption = LOAN_STATUS_OPTIONS.find((o) => o.value === currentStatus);
+    const statusOption = LOAN_STATUS_OPTIONS.find((o) => o.value === currentStatus)
     if (statusOption) {
-      activeFilters.push({ type: 'status', value: currentStatus, label: statusOption.label });
+      activeFilters.push({ type: 'status', value: currentStatus, label: statusOption.label })
     }
   }
 
   if (currentPurpose) {
-    const purposeOption = LOAN_PURPOSE_OPTIONS.find((o) => o.value === currentPurpose);
+    const purposeOption = LOAN_PURPOSE_OPTIONS.find((o) => o.value === currentPurpose)
     if (purposeOption) {
-      activeFilters.push({ type: 'purpose', value: currentPurpose, label: purposeOption.label });
+      activeFilters.push({ type: 'purpose', value: currentPurpose, label: purposeOption.label })
     }
   }
 
   useEffect(() => {
     if (isFirstRender.current) {
-      isFirstRender.current = false;
-      return;
+      isFirstRender.current = false
+      return
     }
 
-    const params = new URLSearchParams(searchParams.toString());
+    const params = new URLSearchParams(searchParams.toString())
 
     if (debouncedSearch === '') {
-      params.delete('search');
+      params.delete('search')
     } else {
-      params.set('search', debouncedSearch);
+      params.set('search', debouncedSearch)
     }
 
     startTransition(() => {
-      router.push(`/loans?${params.toString()}`);
-    });
+      router.push(`/loans?${params.toString()}`)
+    })
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [debouncedSearch]);
+  }, [debouncedSearch])
 
   const updateFilter = (type: 'status' | 'purpose', value: string | null): void => {
-    const params = new URLSearchParams(searchParams.toString());
+    const params = new URLSearchParams(searchParams.toString())
 
     if (value === null) {
-      params.delete(type);
+      params.delete(type)
     } else {
-      params.set(type, value);
+      params.set(type, value)
     }
 
     startTransition(() => {
-      router.push(`/loans?${params.toString()}`);
-    });
-  };
+      router.push(`/loans?${params.toString()}`)
+    })
+  }
 
   const clearAllFilters = (): void => {
-    const params = new URLSearchParams(searchParams.toString());
-    params.delete('status');
-    params.delete('purpose');
+    const params = new URLSearchParams(searchParams.toString())
+    params.delete('status')
+    params.delete('purpose')
 
     startTransition(() => {
-      router.push(`/loans?${params.toString()}`);
-    });
-  };
+      router.push(`/loans?${params.toString()}`)
+    })
+  }
 
   const handleStatusToggle = (value: string): void => {
-    updateFilter('status', currentStatus === value ? null : value);
-  };
+    updateFilter('status', currentStatus === value ? null : value)
+  }
 
   const handlePurposeToggle = (value: string): void => {
-    updateFilter('purpose', currentPurpose === value ? null : value);
-  };
+    updateFilter('purpose', currentPurpose === value ? null : value)
+  }
 
   const removeFilter = (type: 'status' | 'purpose'): void => {
-    updateFilter(type, null);
-  };
+    updateFilter(type, null)
+  }
 
-  const filterCount = activeFilters.length;
+  const filterCount = activeFilters.length
 
   return (
     <div className="rounded-lg border bg-card p-4 space-y-3">
@@ -188,5 +188,5 @@ export function LoanFilters(): React.ReactElement {
         )}
       </div>
     </div>
-  );
+  )
 }
