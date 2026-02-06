@@ -5,12 +5,13 @@ import { LoanFilters } from '@/app/components/LoanFilters';
 import { Card, CardContent } from '@/app/components/ui/card';
 import { Skeleton } from '@/app/components/ui/skeleton';
 
+const PAGE_SIZE = 20;
+
 interface LoansPageProps {
   searchParams: Promise<{
     search?: string;
     status?: string;
-    sortBy?: string;
-    sortOrder?: 'asc' | 'desc';
+    purpose?: string;
   }>;
 }
 
@@ -20,20 +21,15 @@ async function LoansTableContent({
   searchParams: LoansPageProps['searchParams'];
 }): Promise<React.ReactElement> {
   const params = await searchParams;
-  const loans = await getLoans({
+  const filters = {
     search: params.search,
     status: params.status,
-    sortBy: params.sortBy,
-    sortOrder: params.sortOrder,
-  });
+    purpose: params.purpose,
+  };
 
-  return (
-    <>
-      <div className="overflow-x-auto">
-        <LoanDataTable loans={loans} />
-      </div>
-    </>
-  );
+  const { loans, total, hasMore } = await getLoans(0, PAGE_SIZE, filters);
+
+  return <LoanDataTable initialLoans={loans} initialTotal={total} initialHasMore={hasMore} initialFilters={filters} />;
 }
 
 function TableSkeleton(): React.ReactElement {
@@ -60,17 +56,19 @@ function TableSkeleton(): React.ReactElement {
 
 export default function LoansPage({ searchParams }: LoansPageProps): React.ReactElement {
   return (
-    <div className="space-y-6">
-      <div>
+    <div className="flex flex-col flex-1 min-h-0 gap-6">
+      <div className="shrink-0">
         <h1 className="text-3xl font-bold tracking-tight">Loans</h1>
       </div>
 
-      <Suspense fallback={null}>
-        <LoanFilters />
-      </Suspense>
+      <div className="shrink-0">
+        <Suspense fallback={null}>
+          <LoanFilters />
+        </Suspense>
+      </div>
 
-      <Card>
-        <CardContent>
+      <Card className="flex-1 min-h-0 flex flex-col">
+        <CardContent className="flex-1 min-h-0 flex flex-col overflow-hidden">
           <Suspense fallback={<TableSkeleton />}>
             <LoansTableContent searchParams={searchParams} />
           </Suspense>

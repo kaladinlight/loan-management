@@ -5,7 +5,8 @@ import { revalidatePath } from 'next/cache';
 import { prisma } from '@/lib/db';
 import { loanSchema } from '@/lib/schemas/loan';
 import { generateLoanNumber } from '@/lib/utils';
-import type { ActionState } from '@/lib/types';
+import { getLoans } from '@/lib/data/loans';
+import type { ActionState, PaginatedLoansResult, PaginationFilters } from '@/lib/types';
 
 export async function createLoan(_prevState: ActionState, formData: FormData): Promise<ActionState> {
   const raw = Object.fromEntries(formData.entries());
@@ -82,4 +83,12 @@ export async function deleteLoan(id: string): Promise<ActionState> {
   revalidatePath('/');
   revalidatePath('/loans');
   redirect('/loans');
+}
+
+export async function fetchMoreLoans(
+  offset: number,
+  limit: number,
+  filters?: PaginationFilters,
+): Promise<PaginatedLoansResult> {
+  return getLoans(offset, limit, filters);
 }

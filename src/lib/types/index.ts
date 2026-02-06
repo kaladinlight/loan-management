@@ -35,15 +35,20 @@ export interface DashboardStats {
   recentLoans: Loan[];
 }
 
-export interface LoanFilters {
-  search?: string;
-  status?: string;
-  sortBy?: string;
-  sortOrder?: 'asc' | 'desc';
-}
-
 export interface ActionState {
   success: boolean;
   error?: string;
   fieldErrors?: Record<string, string[]>;
+}
+
+export interface PaginationFilters {
+  search?: string;
+  status?: string;
+  purpose?: string;
+}
+
+export interface PaginatedLoansResult {
+  loans: Loan[];
+  total: number;
+  hasMore: boolean;
 }

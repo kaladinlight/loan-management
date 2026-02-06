@@ -1,7 +1,7 @@
 import { prisma } from '@/lib/db';
-import type { DashboardStats, LoanFilters, Loan } from '@/lib/types';
+import type { DashboardStats, Loan, PaginatedLoansResult, PaginationFilters } from '@/lib/types';
 import { serializeLoan } from '@/lib/types';
-import { LoanStatus, Prisma } from '@/generated/prisma/client';
+import { LoanPurpose, LoanStatus, Prisma } from '@/generated/prisma/client';
 
 export async function getDashboardStats(): Promise<DashboardStats> {
   const [loans, statusCounts] = await Promise.all([
@@ -55,7 +55,16 @@ export async function getDashboardStats(): Promise<DashboardStats> {
   };
 }
 
-export async function getLoans(filters?: LoanFilters): Promise<Loan[]> {
+export async function getLoanByNumber(loanNumber: string): Promise<Loan | null> {
+  const loan = await prisma.loan.findUnique({ where: { loanNumber } });
+  return loan ? serializeLoan(loan) : null;
+}
+
+export async function getLoans(
+  offset: number,
+  limit: number,
+  filters?: PaginationFilters,
+): Promise<PaginatedLoansResult> {
   const where: Prisma.LoanWhereInput = {};
 
   if (filters?.search) {
@@ -69,21 +78,23 @@ export async function getLoans(filters?: LoanFilters): Promise<Loan[]> {
     where.status = filters.status as LoanStatus;
   }
 
-  const orderBy: Prisma.LoanOrderByWithRelationInput = {};
-  const sortBy = filters?.sortBy ?? 'createdAt';
-  const sortOrder = filters?.sortOrder ?? 'desc';
-  (orderBy as Record<string, string>)[sortBy] = sortOrder;
+  if (filters?.purpose) {
+    where.purpose = filters.purpose as LoanPurpose;
+  }
 
-  const loans = await prisma.loan.findMany({ where, orderBy });
-  return loans.map(serializeLoan);
-}
+  const [loans, total] = await Promise.all([
+    prisma.loan.findMany({
+      where,
+      orderBy: { createdAt: 'desc' },
+      skip: offset,
+      take: limit,
+    }),
+    prisma.loan.count({ where }),
+  ]);
 
-export async function getLoanById(id: string): Promise<Loan | null> {
-  const loan = await prisma.loan.findUnique({ where: { id } });
-  return loan ? serializeLoan(loan) : null;
-}
-
-export async function getLoanByNumber(loanNumber: string): Promise<Loan | null> {
-  const loan = await prisma.loan.findUnique({ where: { loanNumber } });
-  return loan ? serializeLoan(loan) : null;
+  return {
+    loans: loans.map(serializeLoan),
+    total,
+    hasMore: offset + loans.length < total,
+  };
 }
