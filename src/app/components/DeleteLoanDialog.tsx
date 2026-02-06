@@ -1,6 +1,6 @@
 'use client'
 
-import { isRedirectError } from 'next/dist/client/components/redirect-error'
+import { useRouter } from 'next/navigation'
 import { useState, useTransition } from 'react'
 import { toast } from 'sonner'
 
@@ -22,6 +22,7 @@ interface DeleteLoanDialogProps {
 }
 
 export function DeleteLoanDialog({ loanId, loanNumber }: DeleteLoanDialogProps): React.ReactElement {
+  const router = useRouter()
   const [open, setOpen] = useState(false)
   const [isPending, startTransition] = useTransition()
 
@@ -29,11 +30,9 @@ export function DeleteLoanDialog({ loanId, loanNumber }: DeleteLoanDialogProps):
     startTransition(async () => {
       try {
         await deleteLoan(loanId)
-      } catch (error) {
-        if (isRedirectError(error)) {
-          toast.success(`Loan ${loanNumber} deleted successfully`)
-          throw error
-        }
+        toast.success(`Loan ${loanNumber} deleted successfully`)
+        router.back()
+      } catch {
         toast.error('Failed to delete loan')
         setOpen(false)
       }

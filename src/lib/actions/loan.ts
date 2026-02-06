@@ -88,7 +88,6 @@ export async function deleteLoan(id: string): Promise<void> {
 
   revalidatePath('/')
   revalidatePath('/loans')
-  redirect('/loans')
 }
 
 export async function fetchMoreLoans(
