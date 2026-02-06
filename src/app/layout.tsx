@@ -1,9 +1,11 @@
+import './globals.css';
+
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import { Toaster } from 'sonner';
+
 import { Header } from '@/app/components/Header';
 import { ThemeProvider } from '@/app/components/ThemeProvider';
-import './globals.css';
 
 const inter = Inter({
   variable: '--font-inter',

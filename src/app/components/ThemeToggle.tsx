@@ -1,6 +1,7 @@
 'use client';
 
 import { useTheme } from 'next-themes';
+
 import { Button } from '@/app/components/ui/button';
 
 export function ThemeToggle(): React.ReactElement {

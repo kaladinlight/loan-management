@@ -1,9 +1,10 @@
 import { Suspense } from 'react';
-import { getLoans } from '@/lib/data/loans';
+
 import { LoanDataTable } from '@/app/components/LoanDataTable';
 import { LoanFilters } from '@/app/components/LoanFilters';
 import { Card, CardContent } from '@/app/components/ui/card';
 import { Skeleton } from '@/app/components/ui/skeleton';
+import { getLoans } from '@/lib/data/loans';
 
 const PAGE_SIZE = 20;
 

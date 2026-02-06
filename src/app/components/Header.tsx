@@ -1,8 +1,9 @@
 'use client';
 
-import { useState } from 'react';
 import dynamic from 'next/dynamic';
 import Link from 'next/link';
+import { useState } from 'react';
+
 import { Button } from '@/app/components/ui/button';
 
 const ThemeToggle = dynamic(() => import('@/app/components/ThemeToggle').then((mod) => mod.ThemeToggle), {

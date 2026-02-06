@@ -3,12 +3,13 @@
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { formatCurrency, formatDate } from '@/lib/utils';
-import { fetchMoreLoans } from '@/lib/actions/loan';
+
 import { LoanStatusBadge } from '@/app/components/LoanStatusBadge';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/app/components/ui/table';
 import { Button } from '@/app/components/ui/button';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/app/components/ui/table';
+import { fetchMoreLoans } from '@/lib/actions/loan';
 import type { Loan, PaginationFilters } from '@/lib/types';
+import { formatCurrency, formatDate } from '@/lib/utils';
 
 const PAGE_SIZE = 20;
 

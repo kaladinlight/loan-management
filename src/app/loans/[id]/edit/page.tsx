@@ -1,7 +1,8 @@
 import { notFound } from 'next/navigation';
-import { getLoanByNumber } from '@/lib/data/loans';
-import { updateLoan } from '@/lib/actions/loan';
+
 import { LoanForm } from '@/app/components/LoanForm';
+import { updateLoan } from '@/lib/actions/loan';
+import { getLoanByNumber } from '@/lib/data/loans';
 import type { ActionState } from '@/lib/types';
 
 interface EditLoanPageProps {

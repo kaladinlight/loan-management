@@ -1,5 +1,5 @@
-import { createLoan } from '@/lib/actions/loan';
 import { LoanForm } from '@/app/components/LoanForm';
+import { createLoan } from '@/lib/actions/loan';
 
 export default function NewLoanPage(): React.ReactElement {
   return (

@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect } from 'react';
+
 import { Button } from '@/app/components/ui/button';
 
 interface GlobalErrorProps {

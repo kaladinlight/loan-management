@@ -1,7 +1,7 @@
+import { type LoanPurpose, LoanStatus, type Prisma } from '@/generated/prisma/client';
 import { prisma } from '@/lib/db';
 import type { DashboardStats, Loan, PaginatedLoansResult, PaginationFilters } from '@/lib/types';
 import { serializeLoan } from '@/lib/types';
-import { LoanPurpose, LoanStatus, Prisma } from '@/generated/prisma/client';
 
 export async function getDashboardStats(): Promise<DashboardStats> {
   const [loans, statusCounts] = await Promise.all([

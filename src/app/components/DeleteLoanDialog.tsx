@@ -1,7 +1,8 @@
 'use client';
 
 import { useState, useTransition } from 'react';
-import { deleteLoan } from '@/lib/actions/loan';
+import { toast } from 'sonner';
+
 import { Button } from '@/app/components/ui/button';
 import {
   Dialog,
@@ -12,7 +13,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/app/components/ui/dialog';
-import { toast } from 'sonner';
+import { deleteLoan } from '@/lib/actions/loan';
 
 interface DeleteLoanDialogProps {
   loanId: string;

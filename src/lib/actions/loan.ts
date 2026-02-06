@@ -1,12 +1,13 @@
 'use server';
 
-import { redirect } from 'next/navigation';
 import { revalidatePath } from 'next/cache';
+import { redirect } from 'next/navigation';
+
+import { getLoans } from '@/lib/data/loans';
 import { prisma } from '@/lib/db';
 import { loanSchema } from '@/lib/schemas/loan';
-import { generateLoanNumber } from '@/lib/utils';
-import { getLoans } from '@/lib/data/loans';
 import type { ActionState, PaginatedLoansResult, PaginationFilters } from '@/lib/types';
+import { generateLoanNumber } from '@/lib/utils';
 
 export async function createLoan(_prevState: ActionState, formData: FormData): Promise<ActionState> {
   const raw = Object.fromEntries(formData.entries());

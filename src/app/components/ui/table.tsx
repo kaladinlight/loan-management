@@ -4,11 +4,7 @@ import * as React from 'react';
 
 import { cn } from '@/lib/utils';
 
-function Table({
-  className,
-  wrapper = true,
-  ...props
-}: React.ComponentProps<'table'> & { wrapper?: boolean }) {
+function Table({ className, wrapper = true, ...props }: React.ComponentProps<'table'> & { wrapper?: boolean }) {
   const table = <table data-slot="table" className={cn('w-full caption-bottom text-sm', className)} {...props} />;
 
   if (!wrapper) return table;
@@ -80,4 +76,4 @@ function TableCaption({ className, ...props }: React.ComponentProps<'caption'>) 
   );
 }
 
-export { Table, TableHeader, TableBody, TableFooter, TableHead, TableRow, TableCell, TableCaption };
+export { Table, TableBody, TableCaption, TableCell, TableFooter, TableHead, TableHeader, TableRow };

@@ -1,12 +1,13 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { getLoanByNumber } from '@/lib/data/loans';
-import { formatCurrency, formatDate, calculateMonthlyPayment, calculateTotalRepayment } from '@/lib/utils';
-import { LoanStatusBadge } from '@/app/components/LoanStatusBadge';
+
 import { DeleteLoanDialog } from '@/app/components/DeleteLoanDialog';
+import { LoanStatusBadge } from '@/app/components/LoanStatusBadge';
 import { Button } from '@/app/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/app/components/ui/card';
 import { Separator } from '@/app/components/ui/separator';
+import { getLoanByNumber } from '@/lib/data/loans';
+import { calculateMonthlyPayment, calculateTotalRepayment, formatCurrency, formatDate } from '@/lib/utils';
 
 interface LoanDetailPageProps {
   params: Promise<{ id: string }>;

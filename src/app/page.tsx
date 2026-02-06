@@ -1,11 +1,12 @@
 import Link from 'next/link';
-import { getDashboardStats } from '@/lib/data/loans';
-import { formatCurrency, formatDate } from '@/lib/utils';
-import { StatCard } from '@/app/components/StatCard';
+
 import { LoanStatusBadge } from '@/app/components/LoanStatusBadge';
+import { StatCard } from '@/app/components/StatCard';
+import { Button } from '@/app/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/app/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/app/components/ui/table';
-import { Button } from '@/app/components/ui/button';
+import { getDashboardStats } from '@/lib/data/loans';
+import { formatCurrency, formatDate } from '@/lib/utils';
 
 export default async function DashboardPage(): Promise<React.ReactElement> {
   const stats = await getDashboardStats();
