@@ -5,8 +5,8 @@ import { LoanFilters } from '@/app/components/LoanFilters'
 import { Card, CardContent } from '@/app/components/ui/card'
 import { Skeleton } from '@/app/components/ui/skeleton'
 import { LOAN_PAGE_SIZE } from '@/lib/constants'
-import { getLoans } from '@/lib/data/loans'
-import type { SortableColumn, SortOrder } from '@/lib/types/loans'
+import { getLoans } from '@/lib/data/loan'
+import type { SortableColumn, SortOrder } from '@/lib/types/loan'
 
 interface LoansPageProps {
   searchParams: Promise<{

@@ -9,7 +9,7 @@ import { Button } from '@/app/components/ui/button'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/app/components/ui/table'
 import { useInfiniteScroll } from '@/app/hooks/useInfiniteScroll'
 import { usePaginatedLoanData } from '@/app/hooks/usePaginatedLoanData'
-import type { Loan, PaginationFilters, SortableColumn, SortOrder } from '@/lib/types/loans'
+import type { Loan, PaginationFilters, SortableColumn, SortOrder } from '@/lib/types/loan'
 import { formatCurrency, formatDate } from '@/lib/utils'
 
 interface LoanDataTableProps {

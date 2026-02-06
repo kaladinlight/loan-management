@@ -1,4 +1,4 @@
-export type * from './loans'
+export type * from './loan'
 
 export interface ActionState {
   success: boolean

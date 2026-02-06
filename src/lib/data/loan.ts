@@ -1,13 +1,13 @@
 import type { LoanPurpose, Prisma } from '@/generated/prisma/client'
 import { LoanStatus } from '@/generated/prisma/client'
 import { prisma } from '@/lib/db'
-import type { DashboardStats, Loan, PaginatedLoansResult, PaginationFilters } from '@/lib/types/loans'
+import type { DashboardStats, Loan, PaginatedLoansResult, PaginationFilters } from '@/lib/types/loan'
 import { serializeLoan } from '@/lib/utils'
 
 export async function getDashboardStats(): Promise<DashboardStats> {
   const [loans, statusCounts] = await Promise.all([
     prisma.loan.findMany({
-      orderBy: [{ createdAt: 'desc' }, { id: 'asc' }],
+      orderBy: [{ createdAt: 'desc' }, { id: 'desc' }],
       take: 5,
     }),
     prisma.loan.groupBy({

@@ -5,7 +5,7 @@ import { StatCard } from '@/app/components/StatCard'
 import { Button } from '@/app/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/app/components/ui/card'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/app/components/ui/table'
-import { getDashboardStats } from '@/lib/data/loans'
+import { getDashboardStats } from '@/lib/data/loan'
 import { formatCompactCurrency, formatDate } from '@/lib/utils'
 
 export const dynamic = 'force-dynamic'

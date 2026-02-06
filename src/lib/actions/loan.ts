@@ -3,11 +3,11 @@
 import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
 
-import { getLoans } from '@/lib/data/loans'
+import { getLoans } from '@/lib/data/loan'
 import { prisma } from '@/lib/db'
 import { loanSchema } from '@/lib/schemas/loan'
 import type { ActionState } from '@/lib/types'
-import type { PaginatedLoansResult, PaginationFilters } from '@/lib/types/loans'
+import type { PaginatedLoansResult, PaginationFilters } from '@/lib/types/loan'
 
 async function getNextLoanNumber(): Promise<string> {
   const result = await prisma.$queryRaw<[{ nextval: bigint }]>`SELECT nextval('loan_number_seq')`

@@ -2,7 +2,7 @@ import type { ClassValue } from 'clsx'
 import { clsx } from 'clsx'
 import { twMerge } from 'tailwind-merge'
 
-import type { Loan, PrismaLoan } from './types/loans'
+import type { Loan, PrismaLoan } from './types/loan'
 
 export function cn(...inputs: ClassValue[]): string {
   return twMerge(clsx(inputs))
