@@ -5,7 +5,7 @@ import { formatCurrency, formatDate, calculateMonthlyPayment, calculateTotalRepa
 import { LoanStatusBadge } from '@/app/components/LoanStatusBadge';
 import { DeleteLoanDialog } from '@/app/components/DeleteLoanDialog';
 import { Button } from '@/app/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/app/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/app/components/ui/card';
 import { Separator } from '@/app/components/ui/separator';
 
 interface LoanDetailPageProps {
@@ -25,19 +25,12 @@ export default async function LoanDetailPage({ params }: LoanDetailPageProps): P
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center gap-4">
-        <Button asChild variant="ghost" size="sm">
-          <Link href="/loans">← Back to Loans</Link>
-        </Button>
-      </div>
-
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
           <div className="flex items-center gap-3">
             <h1 className="text-3xl font-bold tracking-tight">{loan.loanNumber}</h1>
             <LoanStatusBadge status={loan.status} />
           </div>
-          <p className="text-muted-foreground mt-1">{loan.borrowerName}</p>
         </div>
         <div className="flex gap-2">
           <Button asChild variant="outline">
@@ -97,7 +90,6 @@ export default async function LoanDetailPage({ params }: LoanDetailPageProps): P
         <Card className="md:col-span-2">
           <CardHeader>
             <CardTitle>Financial Summary</CardTitle>
-            <CardDescription>Loan amount and payment calculations</CardDescription>
           </CardHeader>
           <CardContent>
             <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">

@@ -1,9 +1,18 @@
 'use client';
 
 import { useState } from 'react';
+import dynamic from 'next/dynamic';
 import Link from 'next/link';
 import { Button } from '@/app/components/ui/button';
-import { ThemeToggle } from '@/app/components/ThemeToggle';
+
+const ThemeToggle = dynamic(() => import('@/app/components/ThemeToggle').then((mod) => mod.ThemeToggle), {
+  ssr: false,
+  loading: () => (
+    <Button variant="ghost" size="icon-sm" aria-label="Toggle theme">
+      <span className="h-4 w-4" />
+    </Button>
+  ),
+});
 
 export function Header(): React.ReactElement {
   const [isMenuOpen, setIsMenuOpen] = useState(false);

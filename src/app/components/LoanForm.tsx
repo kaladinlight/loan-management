@@ -63,7 +63,7 @@ export function LoanForm({ loan, action, submitLabel }: LoanFormProps): React.Re
   return (
     <Card>
       <CardHeader>
-        <CardTitle>{loan ? 'Edit Loan' : 'Create New Loan'}</CardTitle>
+        <CardTitle>{loan ? `Loan ${loan.loanNumber}` : 'Create New Loan'}</CardTitle>
       </CardHeader>
       <CardContent>
         <form action={formAction} className="space-y-6">

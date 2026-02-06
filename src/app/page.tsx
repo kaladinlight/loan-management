@@ -3,7 +3,7 @@ import { getDashboardStats } from '@/lib/data/loans';
 import { formatCurrency, formatDate } from '@/lib/utils';
 import { StatCard } from '@/app/components/StatCard';
 import { LoanStatusBadge } from '@/app/components/LoanStatusBadge';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/app/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/app/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/app/components/ui/table';
 import { Button } from '@/app/components/ui/button';
 
@@ -14,7 +14,6 @@ export default async function DashboardPage(): Promise<React.ReactElement> {
     <div className="space-y-8">
       <div>
         <h1 className="text-3xl font-bold tracking-tight">Dashboard</h1>
-        <p className="text-muted-foreground">Overview of your loan portfolio</p>
       </div>
 
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
@@ -39,7 +38,6 @@ export default async function DashboardPage(): Promise<React.ReactElement> {
       <Card>
         <CardHeader>
           <CardTitle>Recent Loans</CardTitle>
-          <CardDescription>Latest 5 loans in the system</CardDescription>
         </CardHeader>
         <CardContent>
           {stats.recentLoans.length === 0 ? (
@@ -53,7 +51,7 @@ export default async function DashboardPage(): Promise<React.ReactElement> {
             <div className="overflow-x-auto">
               <Table>
                 <TableHeader>
-                  <TableRow>
+                  <TableRow className="hover:bg-transparent">
                     <TableHead>Loan Number</TableHead>
                     <TableHead>Borrower</TableHead>
                     <TableHead>Amount</TableHead>
@@ -63,9 +61,12 @@ export default async function DashboardPage(): Promise<React.ReactElement> {
                 </TableHeader>
                 <TableBody>
                   {stats.recentLoans.map((loan) => (
-                    <TableRow key={loan.id} className="hover:bg-muted/50 transition-colors">
+                    <TableRow key={loan.id} className="relative hover:bg-muted/50 transition-colors cursor-pointer">
                       <TableCell>
-                        <Link href={`/loans/${loan.loanNumber}`} className="font-medium text-primary hover:underline">
+                        <Link
+                          href={`/loans/${loan.loanNumber}`}
+                          className="font-medium text-primary hover:underline after:absolute after:inset-0"
+                        >
                           {loan.loanNumber}
                         </Link>
                       </TableCell>

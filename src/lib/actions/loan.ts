@@ -24,7 +24,7 @@ export async function createLoan(_prevState: ActionState, formData: FormData): P
   const count = await prisma.loan.count();
   const loanNumber = generateLoanNumber(count);
 
-  const loan = await prisma.loan.create({
+  await prisma.loan.create({
     data: {
       loanNumber,
       purpose: result.data.purpose,
@@ -40,7 +40,7 @@ export async function createLoan(_prevState: ActionState, formData: FormData): P
 
   revalidatePath('/');
   revalidatePath('/loans');
-  redirect(`/loans/${loan.id}`);
+  redirect(`/loans/${loanNumber}`);
 }
 
 export async function updateLoan(id: string, _prevState: ActionState, formData: FormData): Promise<ActionState> {
@@ -57,7 +57,7 @@ export async function updateLoan(id: string, _prevState: ActionState, formData: 
     return { success: false, fieldErrors };
   }
 
-  await prisma.loan.update({
+  const loan = await prisma.loan.update({
     where: { id },
     data: {
       purpose: result.data.purpose,
@@ -73,7 +73,7 @@ export async function updateLoan(id: string, _prevState: ActionState, formData: 
 
   revalidatePath('/');
   revalidatePath('/loans');
-  redirect(`/loans/${id}`);
+  redirect(`/loans/${loan.loanNumber}`);
 }
 
 export async function deleteLoan(id: string): Promise<ActionState> {

@@ -2,7 +2,7 @@ import { Suspense } from 'react';
 import { getLoans } from '@/lib/data/loans';
 import { LoanDataTable } from '@/app/components/LoanDataTable';
 import { LoanFilters } from '@/app/components/LoanFilters';
-import { Card, CardContent, CardHeader, CardTitle } from '@/app/components/ui/card';
+import { Card, CardContent } from '@/app/components/ui/card';
 import { Skeleton } from '@/app/components/ui/skeleton';
 
 interface LoansPageProps {
@@ -29,7 +29,6 @@ async function LoansTableContent({
 
   return (
     <>
-      <p className="text-sm text-muted-foreground mb-6">{loans.length} total loans</p>
       <div className="overflow-x-auto">
         <LoanDataTable loans={loans} />
       </div>
@@ -64,7 +63,6 @@ export default function LoansPage({ searchParams }: LoansPageProps): React.React
     <div className="space-y-6">
       <div>
         <h1 className="text-3xl font-bold tracking-tight">Loans</h1>
-        <p className="text-muted-foreground">Manage and view all loans</p>
       </div>
 
       <Suspense fallback={null}>
@@ -72,9 +70,6 @@ export default function LoansPage({ searchParams }: LoansPageProps): React.React
       </Suspense>
 
       <Card>
-        <CardHeader>
-          <CardTitle>All Loans</CardTitle>
-        </CardHeader>
         <CardContent>
           <Suspense fallback={<TableSkeleton />}>
             <LoansTableContent searchParams={searchParams} />

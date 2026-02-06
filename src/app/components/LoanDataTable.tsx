@@ -60,13 +60,13 @@ export function LoanDataTable({ loans }: LoanDataTableProps): React.ReactElement
   return (
     <Table>
       <TableHeader>
-        <TableRow>
+        <TableRow className="hover:bg-transparent">
           {COLUMNS.map((col) => (
             <TableHead key={col.key} className={col.align === 'right' ? 'text-right' : ''}>
               {col.sortable ? (
                 <button
                   onClick={() => handleSort(col.key as SortableColumn)}
-                  className="font-medium hover:text-foreground transition-colors"
+                  className="font-medium hover:text-foreground transition-colors cursor-pointer"
                 >
                   {col.label}
                   {getSortIndicator(col.key)}
@@ -80,9 +80,12 @@ export function LoanDataTable({ loans }: LoanDataTableProps): React.ReactElement
       </TableHeader>
       <TableBody>
         {loans.map((loan) => (
-          <TableRow key={loan.id} className="hover:bg-muted/50 transition-colors">
+          <TableRow key={loan.id} className="relative hover:bg-muted/50 transition-colors cursor-pointer">
             <TableCell>
-              <Link href={`/loans/${loan.loanNumber}`} className="font-medium text-primary hover:underline">
+              <Link
+                href={`/loans/${loan.loanNumber}`}
+                className="font-medium text-primary hover:underline after:absolute after:inset-0"
+              >
                 {loan.loanNumber}
               </Link>
             </TableCell>
