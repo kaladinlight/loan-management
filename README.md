@@ -55,6 +55,9 @@ Open [http://localhost:3000](http://localhost:3000) to view the app.
 | `yarn start`           | Start production server                  |
 | `yarn lint`            | Run ESLint (includes formatting checks)  |
 | `yarn lint:fix`        | Fix lint and formatting issues           |
+| `yarn test`            | Run unit tests                           |
+| `yarn test:watch`      | Run tests in watch mode                  |
+| `yarn test:coverage`   | Run tests with coverage report           |
 | `yarn clean`           | Remove .next, node_modules, and generated |
 | `yarn prisma:generate` | Regenerate Prisma client                 |
 | `yarn prisma:migrate`  | Run database migrations                  |

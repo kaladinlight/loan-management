@@ -71,6 +71,8 @@ prisma.config.ts    # Prisma configuration (project root)
 - `yarn start` — start production server
 - `yarn lint` — run ESLint (includes formatting checks)
 - `yarn lint:fix` — fix lint and formatting issues
+- `yarn test` — run unit tests
+- `yarn test:watch` — run tests in watch mode
 - `yarn clean` — remove .next, node_modules, and generated directories
 - `yarn prisma:generate` — regenerate Prisma client
 - `yarn prisma:migrate` — run database migrations
